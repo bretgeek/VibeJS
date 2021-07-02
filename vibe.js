@@ -68,10 +68,9 @@ function Vibe($self = document, {fn={}} = {} ) {
   }// end read
 
 
-  /* RENDER */
-
   /**
 * render
+* RENDER
 * Renders a component to a specified element.
 * @param {function} component - required, the component function to render
 * @param {object} {} - optional with defaults
@@ -767,7 +766,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * CSS
 * @description set the inline css of an element
-*@return this and is chainable
+* @return this and is chainable
 */
   function css(str) {
     if (isDocument) {
@@ -784,7 +783,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * CREATENODE
 * @description creates a new node
-*@return create node
+* @return create node
  */
   function createNode(nodetype = 'div', {
     override = false,
@@ -860,7 +859,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * detach
 * DETACH
 * @description Remove a node from the DOM and save a reference to a clone if keep flag is set for re-insertion
-*@return Clone with original id for re-insertion if keep=true otherwise returns this and is chainable
+* @return Clone with original id for re-insertion if keep=true otherwise returns this and is chainable
 */
   function detach( keep=false ) {
     // Dont remove document
@@ -889,7 +888,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * clone
 * CLONE
 * @description Clone a node
-*@return clone with new id
+* @return clone with new id
 */
   function clone( {to=false, position='append'} = {} ) {
     // Don't clone  document
@@ -915,7 +914,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * addClass
 * ADDCLASS
 * @description Add to an element's class list
-@return this
+* @return this
 */
   function addClass(s, r = false) {
     if (isDocument) {
@@ -933,8 +932,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * removeClass
 * REMOVECLASS
-* @description remove a class from element's class list
-@return this
+* @description Remove a class from element's class list
+* @return this
 */
   function removeClass(s) {
     if (isDocument) {
@@ -947,7 +946,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * removeAttr
 * REMOVEATTR
-@return this
+* @description Remove attributes from element
+* @return this
 */
   function removeAttr(str) {
     if (isDocument) {
@@ -960,8 +960,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * attr
 * ATTR
-* set or return attr
-@return this or attr
+* @description Set or return attr
+* @return this or attr
 */
   function attr(str, s = false, r = false) {
     if (isDocument) {
@@ -989,8 +989,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * data
 * DATA
-* set or return data
-@return this  dataset if document
+* @description  Set or return data
+* @return this  dataset if document
 */
   function data() {
     if (isDocument) {
@@ -1002,8 +1002,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * _data
 * _DATA
-* set or return data-attrs
-@return value of data- if r='get'
+* @description Set or return data-attrs
+* @return value of data- if r='get'
 */
 
   function _data(e, a, r='set') {
@@ -1029,7 +1029,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isString
 * ISSTRING
-@return boolean
+* @description Check if string
+* @return boolean
 */
   function isString(thing) {
     return typeof thing === 'string';
@@ -1038,7 +1039,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isNumber
 * ISNUMBER
-@return boolean
+* @description Check if number
+* @return boolean
 */
   function isNumber(value) {
     return /^-{0,1}\d+$/.test(value);
@@ -1047,7 +1049,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isFunction
 * ISFUNCTION
-@return boolean
+* @description Check if function
+* @return boolean
 */
   function isFunction(thing) {
     return typeof thing === 'function';
@@ -1056,7 +1059,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isObject
 * ISOBJECT
-@return boolean
+* @description Check if object
+* @return boolean
 */
   function isObject(thing) {
     // arrays are objects too so use isArray if you want to find arrays
@@ -1066,6 +1070,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isElement
 * ISELEMENT
+* @description Check if element
 @return boolean
 */
   function isElement(thing) {
@@ -1077,6 +1082,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isArray*
 * ISARRAY
+* @description Check if array
 @return boolean
 */
   function isArray(thing) {
@@ -1089,9 +1095,10 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /** uuidv4
 * UUIDV4
-* isArray*
+* isArray
 * ISARRAY
-@return uuid4v
+* @description Make uuidv4
+* @return uuid4v
 */
   function uuidv4() {
     if (isObject(crypto)) {
@@ -1116,9 +1123,10 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /** filterString
-* FILTERSTRING filter strings
+* FILTERSTRING
+* @description Filter strings
+* @return string
 */
-
   function filterString(str, strict=false) {
     str = str.replace(/[^\x20-\x7E]+/g, '');
     if (strict) {
@@ -1172,7 +1180,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /**
-*setState
+* setState
 * SETSTATE
 * @return obj
 */
