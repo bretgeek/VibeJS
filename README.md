@@ -4,7 +4,7 @@
 
 ## Basic Usage
 
-Add Vibe to your page before closing body tag (can also bundle files):
+#### Add Vibe to your page before closing body tag (can also bundle files):
 
 ```
 <script src='https://yoururl.com/vibe.min.js'></script>
