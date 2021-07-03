@@ -1,5 +1,5 @@
 # VibeJS
-* A small component based app library to build user interfaces.
+* A small component based library to build user interfaces and apps.
 
 
 ## Basic Usage
@@ -23,7 +23,7 @@ const myComponent = () => {
         console.log('I am app')
     };
     
-    // If init exists it runs autmatically
+    // init runs autmatically if it exists
     const init = function(e) {
     console.log('I am an '+e)
     e.$css('cursor: pointer;');  // can chain e.$funcs DOM functions too 
