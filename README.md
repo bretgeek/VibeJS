@@ -2,7 +2,7 @@
 * A small component based JavaScript library to build user interfaces and apps.
 
 ## Features
-* Small - currently under 11KB minified.
+* Small - currently under 12KB minified.
 * Create self contained components for composing larger components and apps.
 * Optionally access components externally.
 * Rendered components receive built-in methods (the Vibe).
