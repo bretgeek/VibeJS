@@ -76,7 +76,7 @@ const myRef = $vibe.render(myComponent, {
  * Note: You can render a component as many times as you want with different reference names.
 
 
-#### After rendering you can now do things with the reference "myRef" like:
+#### Components are self contained however, after rendering you can also do things with the reference ( "myRef" in this case)  like:
 ```
 // Call built-in Vibe functions to change the css and the text etc. (chainable).
 
