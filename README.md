@@ -24,6 +24,7 @@ const myComponent = () => {
     };
     
     // init runs autmatically if it exists
+
     const init = function(e) {
     console.log('I am an '+e)
     e.$css('cursor: pointer;');  // can chain e.$funcs DOM functions too 
@@ -34,6 +35,8 @@ const myComponent = () => {
     };  
 
     const state = {x:1};
+
+   // Render uses this return object to add these to the component
 
     return {
         template: template,
@@ -56,24 +59,37 @@ const myComponent = () => {
 
 ```
 // somewhere in your html
+
 <div id='app'> </div>
 ```
 
 ```
+// className, state, events, plugins (like fn of component) etc. can be added here too
+
 const myRef = $vibe.render(myComponent, {
     to: '#app',
     position: 'append',
-    className: 'myComponent',
+    className: 'renderedComponent',
 });     
  
 ```
-#### After rendering you can now do things like:
+ * Note: You can render a component as many times as you want with different reference names.
+
+
+#### After rendering you can now do things with the reference "myRef" like:
 ```
+// Call built-in Vibe functions to change the css and the text etc. (chainable).
+
+myRef.$css('display: inline-block').$text('Hey hey!');
+
 // Call the internal function you declared in the component
+
 myRef.$fn.func(); 
 
-// Call built-in Vibe functions to change the css and the text etc. (chainable).
-myRef.$css('display: inline-block').$text('Hey hey!');
+
+// Tack on more events with $on 
+
+myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 ```
 
 ##### Components can render other components too (hint: modules/import/export).

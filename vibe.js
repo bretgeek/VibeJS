@@ -88,7 +88,6 @@ function Vibe($self = document, {fn={}} = {} ) {
       const el = component();
       // TODO what else do we need here, anything?
       if (isDocument) {
-        $self.componentList = $self.componentList || [];
       }
 
       // attach all functions from Vibe to newComponent as $ and call by $.fname
@@ -148,8 +147,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       newComponent.id = uuidv4();
 
-      // Add to list of compoent ids onto document
-      document.componentList.push(newComponent.id);
 
       if (isElement(towhere)) {
         ready(mount(newComponent, towhere, position));
@@ -217,8 +214,6 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (!component.id) {
           component.id = uuidv4();
         }
-        // Keep a list of components on document
-        document.componentList.push(component.id);
         return component;
       }
       // Process component as an html string
@@ -987,12 +982,12 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /**
-* data
-* DATA
-* set or return data
+* dataset
+* DATASET
+* @description set or return data
 @return this  dataset if document
 */
-  function data() {
+  function dataset() {
     if (isDocument) {
       return this;
     }
@@ -1002,11 +997,11 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * _data
 * _DATA
-* set or return data-attrs
-@return value of data- if r='get'
+* @description set or return data-attrs
+@return {primitive}
 */
-
-  function _data(e, a, r='set') {
+  function data(a, r='set') {
+    const e = $self;
     if (isDocument) {
       return this;
     }
@@ -1020,6 +1015,49 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     if (r === 'get') {
       return e.getAttribute('data-'+a);
+    }
+  }
+
+  /**
+* children
+* CHILDREN
+* @description returns only direct children of $self
+* @return {Array}
+*/
+  function children( {str=false, fn=false, vibe=true} = {} ) {
+    if (isDocument) {
+      return this;
+    }
+    if (isString(str)) {
+      const carr = [];
+      console.log('str:'+ str);
+      for (let i = 0; i < $self.children.length; i++) {
+        if ($self.children[i].matches(str)) {
+          console.log('matches');
+          if (isFunction(fn)) {
+            fn($self.children[i]);
+          }
+          const child = $self.children[i];
+          if (vibe) {
+            child.$ = new Vibe(child);
+          }
+          carr.push(child);
+        }
+      }
+      return carr;
+    } else {
+      if (isFunction(fn)) {
+        for (let i = 0; i < $self.children.length; i++) {
+          if (isFunction(fn)) {
+            fn($self.children[i]);
+          }
+          if (vibe) {
+            $self.children[i].$ = new Vibe($self.children[i]);
+          }
+          carr.push($self.children[i]);
+        }
+      }
+      return carr;
     }
   }
 
@@ -1299,20 +1337,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     return ok;
   }
 
-
-  /**
-* components
-* COMPONENTS
-* @return list of names of components
-*/
-  function components() {
-    if (isDocument) {
-      return document.componentList;
-    } else {
-      return $self.componentList;
-    }
-  }
-
   /**
 * get
 * GET
@@ -1395,6 +1419,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     rpx: rpx,
     addClass: addClass,
     removeClass: removeClass,
+    children: children,
     before: before,
     insertBefore: insertBefore,
     insertAfter: insertAfter,
@@ -1408,8 +1433,8 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     prependTo: prependTo,
     createNode: createNode,
     filterString: filterString,
+    dataset: dataset,
     data: data,
-    _data: _data,
     detach: detach,
     render: render,
     addplug: addplug,
@@ -1428,8 +1453,6 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     trigger: trigger,
     html: html,
     text: text,
-    componentList: [],
-    components: components,
     getState: getState,
     setState: setState,
     isFunction: isFunction,
@@ -1452,5 +1475,5 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
   return obj;
 }
 /* expose as $vibe */
-const $vibe = new Vibe(document);
+var $vibe = new Vibe(document);
 
