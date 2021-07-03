@@ -67,6 +67,14 @@ const myRef = $vibe.render(myComponent, {
 });     
  
 ```
+#### After rendering you can now do things like:
+```
+// Call the internal function you declared in the component
+myRef.$fn.func(); 
+
+// Call built-in Vibe functions change the css and the text (chainable)
+myRef.$css('display: inline-block').$text('Hey hey!');
+```
 
 ##### Components can render other components too (hint: modules/import/export).
 
