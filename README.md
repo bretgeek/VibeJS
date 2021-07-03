@@ -68,13 +68,14 @@ const myComponent = () => {
 
 #### Render the component to a DIV with an id of "app" and save a reference to it as "myRef"
 
-
+* In an html file:
 ```
 // somewhere in your html
 
 <div id='app'> </div>
 ```
 
+* In an script tag after vibe.min.js:
 ```
 // className, state, events, plugins (like fn of component) etc. can be added here too
 
