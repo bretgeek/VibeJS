@@ -39,7 +39,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 * READY
 * @description Checks if document is ready by checking vibeload variable that gets set in the iife above
 */
-
   function ready(fn, fallbacktime=3000) {
     let docint;
     let tout;
@@ -74,6 +73,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * Renders a component to a specified element.
 * @param {function} component - required, the component function to render
 * @param {object} {} - optional with defaults
+* @return {null}
 */
   function render(component, {to = 'body', type = 'div', position = 'append', state={}, props = {}, plugin = {}, events = {}, className='vibe'} = {} ) {
     // If to is a string and not and existing node i.e. an id or class we must query for it.
@@ -133,7 +133,9 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (Object.keys(el.events).length > 0) {
           newComponent.$event = el.events;
           for (const i in newComponent.$event) {
-            newComponent.addEventListener(i, newComponent.$event[i], true);
+            if (newComponent.$event.hasOwnProperty(i)) {
+              newComponent.addEventListener(i, newComponent.$event[i], true);
+            }
           }
         }
       }
@@ -141,7 +143,9 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (Object.keys(events).length > 0) {
         newComponent.$event = events;
         for (const i in newComponent.$event) {
-          newComponent.addEventListener(i, newComponent.$event[i], true);
+          if (newComponent.$event.hasOwnProperty(i)) {
+            newComponent.addEventListener(i, newComponent.$event[i], true);
+          }
         }
       }
 
@@ -208,7 +212,9 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (Object.keys(events).length > 0) {
           component.$event = events;
           for (const i in component.$event) {
-            component.addEventListener(i, component.$event[i], true);
+            if (component.$event.hasOwnProperty(i)) {
+              component.addEventListener(i, component.$event[i], true);
+            }
           }
         }
 
@@ -253,7 +259,9 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (Object.keys(events).length > 0) {
           newComponent.$events = events;
           for (const i in newComponent.$events) {
-            newComponent.addEventListener(i, newComponent.$events[i], true);
+            if (newComponent.$event.hasOwnProperty(i)) {
+              newComponent.addEventListener(i, newComponent.$events[i], true);
+            }
           }
         }
 
@@ -270,9 +278,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * mount
 * MOUNT
 * @description Internal function mounts an element to another element
-* @return this
+* @return {object}
 */
-
   function mount(newComponent, towhere, position ) {
     switch (position) {
       case 'after':
@@ -302,7 +309,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * on
 * ON
 * @description Adds an event to an element
-* @return this
+* @return {object}
 */
   function on(etype = 'mousedown', handler, cap = false) {
     let userCap = cap;
@@ -332,7 +339,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * removeEvent / off
 * REMOVEEVENT OFF
 * @description Triggers an event
-* @return this
+* @return {object}
 */
   function removeEvent(etype = 'mousedown', handler, cap = false) {
     const y = $self;
@@ -362,7 +369,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * trigger
 * TRIGGER
 * @description Triggers an event
-* @return collection
+* @return {Array}
 */
   function trigger(e) {
     const y = $self;
@@ -381,9 +388,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * select
 * SELECT
 * @description select elements of another element optionionally vibe them
-* @return collection or false if none
+* @return {Array}
 */
-
   function select(str, {
     all = false,
     vibe = false,
@@ -419,8 +425,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * rpx
 * RPX
-*@description  Remove px from a number
-* @return  number
+* @description  Remove px from a number
+* @return {Number}
 */
   function rpx(s) {
     s = s.toString();
@@ -432,7 +438,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * cs
 * CS
 * @description  Get computed styles of element
-* @return computed stryles of an element
+* @return {string}
 */
   function cs(prop, trim = false) {
     let cs = getComputedStyle($self).getPropertyValue(prop) || null;
@@ -451,7 +457,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * rect
 * RECT
 * @description  Get dimensions of element
-* @return an element for use by
+* @return {node}
 */
   function rect(st = false, round = false) {
     const allow = ['x', 'y', 'width', 'height', 'right', 'left', 'top', 'bottom'];
@@ -473,7 +479,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * procHTML
 * PROCHTML
 *@description Internal function for isHTML - Process html by creating a node of type s
-* @return an element
+* @return {node}
 */
   function procHTML(s) {
     // create a wrapper so we can turn HTML string into a node
@@ -486,9 +492,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isHTML
 * ISHTML
 * @description Check if string is html return true or false or tag name if t is true
-* @returns this to maintain chain
+* @return {object}
 */
-
   function isHTML(str, t = false) {
     // if t is true return the tag name and the html
     const doc = new DOMParser().parseFromString(str, 'text/html');
@@ -503,7 +508,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * text
 * TEXT
 * @description Get or set text
-* @return this to maintain chain
+* @return {object}
 */
   function text(str = false) {
     if (isDocument) {
@@ -522,7 +527,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * html
 * HTML
 * @description Get or set html
-* @return this to maintain chain
+* @return {object}
 */
   function html(str = false) {
     if (isDocument) {
@@ -541,7 +546,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * after
 * AFTER
 * @description Insert element after another
-* @return this to maintain chain
+* @return {object}
 */
   function after(str) {
     __beforeOrAfter(str);
@@ -553,7 +558,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * before
 * BEFORE
 * @description Insert element before another
-* @return this to maintain chain
+* @return {object}
 */
   function before(str) {
     __beforeOrAfter(str, true);
@@ -565,7 +570,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * insertBefore
 * INSERTBEFORE
 * @description Insert element before another
-* @return this to maintain chain
+* @return {object}
 */
   function insertBefore(str) {
     __beforeOrAfter(str, true, true);
@@ -577,7 +582,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * insertAfter
 * INSERTAFTER
 * @description Insert element after another
-* @return this to maintain chain
+* @return {object}
 */
   function insertAfter(str) {
     __beforeOrAfter(str, false, true);
@@ -588,7 +593,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * _beforeOrAfter
 * _BEFOREORAFTER
 * @description internal function for insertAfter etc.
-* @return this to maintain chain
+* @return {object}
 */
   function __beforeOrAfter(str, p = false, I = false) {
     if (isDocument) {
@@ -645,7 +650,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * append
 * APPEND
 * @description Append text or element to another
-* @return this to maintain chain
+* @return {object}
 */
   function append(str, p = false) {
     if (isDocument) {
@@ -683,7 +688,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * prepend
 * PREPEND
 * @description Prepend text or element to another
-* @return this to maintain chain
+* @return {object}
 */
   function prepend(str) {
     if (isDocument) {
@@ -701,7 +706,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * prependTo
 * PREPENDTO
 * @description Prepend element to another
-* @return this to maintain chain
+* @return {object}
 */
   function prependTo(str) {
     if (!str) {
@@ -718,7 +723,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * appendTo
 * APPENDTO
 * @description Append element to another
-* @return this to maintain chain
+* @return {object}
 */
   function appendTo(str) {
     if (!str) {
@@ -733,7 +738,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * _to
 * _TO
 * @description internal function for appendTo etc
-* @return this to maintain chain
+* @return {object}
 */
   function __To(str, p = false) {
     if (isDocument) {
@@ -766,7 +771,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * CSS
 * @description set the inline css of an element
-* @return this and is chainable
+* @return {object}
 */
   function css(str) {
     if (isDocument) {
@@ -783,7 +788,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * CREATENODE
 * @description creates a new node
-* @return create node
+* @return {node}
  */
   function createNode(nodetype = 'div', {
     override = false,
@@ -800,7 +805,9 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     const newnode = document.createElement(nodetype);
     const node = newnode;
+/* eslint-disable */
     node.$ = Vibe().render(newnode);
+    /* eslint-enable */
 
     if (!to) {
       to = $self;
@@ -859,7 +866,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * detach
 * DETACH
 * @description Remove a node from the DOM and save a reference to a clone if keep flag is set for re-insertion
-* @return Clone with original id for re-insertion if keep=true otherwise returns this and is chainable
+* @return {node} Clone with original id for re-insertion if keep=true otherwise returns this and is chainable
 */
   function detach( keep=false ) {
     // Dont remove document
@@ -888,7 +895,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * clone
 * CLONE
 * @description Clone a node
-* @return clone with new id
+* @return {node} clone with new id
 */
   function clone( {to=false, position='append'} = {} ) {
     // Don't clone  document
@@ -914,7 +921,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * addClass
 * ADDCLASS
 * @description Add to an element's class list
-* @return this
+* @return {object}
 */
   function addClass(s, r = false) {
     if (isDocument) {
@@ -933,7 +940,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * removeClass
 * REMOVECLASS
 * @description Remove a class from element's class list
-* @return this
+* @return {object}
 */
   function removeClass(s) {
     if (isDocument) {
@@ -947,7 +954,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * removeAttr
 * REMOVEATTR
 * @description Remove attributes from element
-* @return this
+* @return {object}
 */
   function removeAttr(str) {
     if (isDocument) {
@@ -961,7 +968,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * attr
 * ATTR
 * @description Set or return attr
-* @return this or attr
+* @return {object} {string}
 */
   function attr(str, s = false, r = false) {
     if (isDocument) {
@@ -990,7 +997,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * data
 * DATA
 * @description  Set or return data
-* @return this  dataset if document
+* @return {object} {Array}
 */
   function data() {
     if (isDocument) {
@@ -1004,8 +1011,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * _DATA
 * @description Set or return data-attrs
 * @return value of data- if r='get'
+* @return {string}
 */
-
   function _data(e, a, r='set') {
     if (isDocument) {
       return this;
@@ -1030,7 +1037,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isString
 * ISSTRING
 * @description Check if string
-* @return boolean
+* @return {boolean}
 */
   function isString(thing) {
     return typeof thing === 'string';
@@ -1040,7 +1047,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isNumber
 * ISNUMBER
 * @description Check if number
-* @return boolean
+* @return {boolean}
 */
   function isNumber(value) {
     return /^-{0,1}\d+$/.test(value);
@@ -1050,7 +1057,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isFunction
 * ISFUNCTION
 * @description Check if function
-* @return boolean
+* @return {boolean}
 */
   function isFunction(thing) {
     return typeof thing === 'function';
@@ -1060,7 +1067,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isObject
 * ISOBJECT
 * @description Check if object
-* @return boolean
+* @return {boolean}
 */
   function isObject(thing) {
     // arrays are objects too so use isArray if you want to find arrays
@@ -1071,7 +1078,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isElement
 * ISELEMENT
 * @description Check if element
-@return boolean
+* @return {boolean}
 */
   function isElement(thing) {
     // arrays are objects too so use isArray if you want to find arrays
@@ -1083,7 +1090,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * isArray*
 * ISARRAY
 * @description Check if array
-@return boolean
+* @return {boolean}
 */
   function isArray(thing) {
     if (Array.isArray(thing)) {
@@ -1095,10 +1102,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /** uuidv4
 * UUIDV4
-* isArray
-* ISARRAY
 * @description Make uuidv4
-* @return uuid4v
+* @return {string}
 */
   function uuidv4() {
     if (isObject(crypto)) {
@@ -1125,7 +1130,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /** filterString
 * FILTERSTRING
 * @description Filter strings
-* @return string
+* @return {string}
 */
   function filterString(str, strict=false) {
     str = str.replace(/[^\x20-\x7E]+/g, '');
@@ -1140,7 +1145,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * id
 * ID
-* @return id
+* @return {string}
 */
   function id() {
     if (isDocument) {
@@ -1152,7 +1157,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /** addplug
 * ADDPLUG
-* Not recommended for use the prefered way to add a plug is component level or at component render obj
+* Expiremental Not Recommended for use the prefered way to add a plug is component level or at component render obj
 */
   function addplug(fn) {
     if (isFunction(fn)) {
@@ -1170,7 +1175,9 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /**
 * run
-* @return this
+* RUN
+* @description Run a function on $self
+* @return {object}
 */
   function run(fn) {
     if (isFunction(fn)) {
@@ -1182,7 +1189,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * setState
 * SETSTATE
-* @return obj
+* @description Set state as key:value setState( { x:1, html: `<span>hey</span>`} ) etc.
+* @return {object}
 */
   function setState(obj ={}) {
     if (isDocument) {
@@ -1194,18 +1202,26 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * getState
 * GETSTATE
+* @description Get value of state property, returns individual value or entire obj
+* @return {object}
 */
   function getState(str) {
     if (isDocument) {
       return this;
     }
-    return $self.$state[str];
+    if (!str) {
+      return $self.$state;
+    } else {
+      return $self.$state[str];
+    }
   }
 
 
   /**
 * observe
 * OBSERVE
+* @description Observe element.
+* @return {observer}
 */
   function observe(fn, name = 'name', {delay=10, child=true, attr=true, subtree=false, attrs=['none'], chardat=false, attrsOV=false, chardatOV=false} ) {
     // keep a record of observers in an object of global var or component so we can disconnect them later
@@ -1276,8 +1292,9 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * unobserve
 * UNOBSERVE
+* @description Remove observer
+* @return {object}
 */
-
   function unobserve(name='name') {
     // disconnect all
     if (name === 'all') {
@@ -1300,7 +1317,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * getobservers
 * GETOBSERVERS
-* @return list of names of observers
+* @description Get list of observers
+* @return {Array}
 */
   function getobservers() {
     const ok = Object.keys($self.$observers);
@@ -1311,7 +1329,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * components
 * COMPONENTS
-* @return list of names of components
+* @description Get list of components
+* @return {Array}
 */
   function components() {
     if (isDocument) {
@@ -1324,6 +1343,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * get
 * GET
+* @description Fetch data from URL and send to fn
+* @return {object}
  */
   async function get( {url = false, type = 'json', fn=false, e={}} = {} ) {
     const response = await fetch(url);
@@ -1361,25 +1382,24 @@ function doTextFetch(data, e ) {
                // OR
                console.log(JSON.parse(data));
 }
-
 h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
-
 */
 
 
   /**
 * isTouch
-* @description is touch device?
-*@ returns boolean
+* @description Check if touch device
+* @return {boolean}
 */
   function isTouch() {
     return window.matchMedia('(pointer: coarse)').matches || false;
   }
 
   /**
- *hidekbd
+* hidekbd
+* HIDEKBD
 * @description hides the keyboard on mobile devices for use when touching elements that are editable but you don't want the keyboard to show
-*@ returns this
+* @return {object}
 */
   function hidekbd() {
     setTimeout(function() {
@@ -1391,6 +1411,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
   /**
 * obj
 * RETURN OBJ
+* @description This is the vibe
 */
   const obj = {
     fn: fn,
@@ -1429,6 +1450,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     cs: cs,
     on: on,
     observe: observe,
+    hidekbd: hidekbd,
     observers: {},
     unobserve: unobserve,
     getobservers: getobservers,
@@ -1447,13 +1469,17 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     isNumber: isNumber,
   };
 
-  // This allows you to do Appref.$text()
-  // instead of Appref.$.text());
-  // use $vibe.funcname with no dollar prefix, only vibed element function calls are prefixed with a dollar
-
+  /**
+* $
+* This allows you to do component.$text()
+* instead of component.$.text());
+* Use $vibe.funcname with no dollar prefix, only vibed components function calls are prefixed with a dollar
+*/
   for (const i in obj) {
-    const key = '$'+i;
-    $self[key] = obj[i];
+    if (obj.hasOwnProperty(i)) {
+      const key = '$'+i;
+      $self[key] = obj[i];
+    }
   }
 
 
