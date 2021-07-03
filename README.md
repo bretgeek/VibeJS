@@ -95,7 +95,91 @@ myRef.$fn.func();
 myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 ```
 
-##### Components can render other components too (hint: modules/import/export).
+##### Components can render other components too (hint: modules/import/export within components).
+
+
+#### Bundle with Webpack
+
+
+* Suppose you have installed Webpack. [install Webpack] https://webpack.js.org/guides/installation/ ...
+
+
+
+#### In dist/index.html
+
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started</title>
+  </head>
+  <body>
+      <div id='app'></div>
+    <script src="https://cdn.jsdelivr.net/gh/bretgeek/VibeJS@main/vibe.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
+```
+
+
+
+#### In /src/App.js
+
+```
+export const App = () => {
+
+    const template = '<div>I am app!</div>';
+    const func = function say() {
+        console.log('I am app!')
+    };  
+    
+    const init = function(e) {
+    console.log('I am e '+e)
+         e.$css('cursor: pointer;');
+    }; // can add extras on e too a init time
+
+    const click = function click(e) {
+        console.log('clicked ' + e.target.tagName );
+        this.$text('I was clicked!')
+    };  
+    const state = {x:1};
+    return {
+        template: template,
+        className: 'webpacked',
+        init: init,
+        fn: {
+            func: func
+        },  
+        events: {
+            click: click,
+        },  
+        state: state
+    }   
+}
+```
+
+#### In /src/index.js
+
+```
+import {App} from '/src/App.js';
+
+function tip() {console.log('tip') };
+const Appref = $vibe.render(App, {
+    to: '#app',
+    position: 'append',
+    plugin: {tip: tip} ,
+});
+Appref.$plugin.tip();
+```
+
+#### bundle it
+```
+npx webpack
+```
+
+
+
 
 #### More documentation/usage/tutorials coming soon...
 
