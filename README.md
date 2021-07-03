@@ -112,7 +112,7 @@ myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Getting Started</title>
+    <title>App</title>
   </head>
   <body>
       <div id='app'></div>
