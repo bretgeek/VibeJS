@@ -5,7 +5,7 @@ A small component based app library to build user interfaces.
 
 
 
-## Usage
+## Basic Usage
 
 Add Vibe to your page before closing body tag (can also bundle files):
 
@@ -54,7 +54,7 @@ const myComponent = () => {
 
 ```
 
-#### Render the component to a id with an id of "app" and save a reference to it as "myRef"
+#### Render the component to a DIV with an id of "app" and save a reference to it as "myRef"
 
 
 ```
@@ -71,6 +71,7 @@ const myRef = $vibe.render(myComponent, {
  
 ```
 
+##### Components can also render other components. (Hint: modules/export/import);
 
 #### More documentation/Usage/Tutorials coming soon.
 
