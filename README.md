@@ -72,7 +72,7 @@ const myRef = $vibe.render(myComponent, {
 // Call the internal function you declared in the component
 myRef.$fn.func(); 
 
-// Call built-in Vibe functions change the css and the text (chainable)
+// Call built-in Vibe functions to change the css and the text etc. (chainable).
 myRef.$css('display: inline-block').$text('Hey hey!');
 ```
 
