@@ -14,7 +14,9 @@
 
 ## Basic Usage
 
-#### Add Vibe to your page before closing body tag (can also bundle files):
+* Basic usage for manually adding and using VibeJS into a web page. (see **Bundle with Webpack** below for alternate method of use with a bundler)
+
+#### Add Vibe to your page before closing body tag :
 
 ```
 <script src='https://yoururl.com/vibe.min.js'></script>
