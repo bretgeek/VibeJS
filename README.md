@@ -68,7 +68,7 @@ const myRef = $vibe.render(myComponent, {
  
 ```
 
-##### Components can also render other components. (Hint: modules/export/import);
+##### Components can render other components too (hint: modules/import/export).
 
 #### More documentation/usage/tutorials coming soon...
 
