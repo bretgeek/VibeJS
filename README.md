@@ -12,7 +12,7 @@
 ```
 
 
-#### Make a component with a function:
+#### Make a component with a function: (in a script tag or external.js/bundle.js)
 
 ```
 const myComponent = () => {
