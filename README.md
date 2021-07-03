@@ -98,11 +98,12 @@ myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 ##### Components can render other components too (hint: modules/import/export within components).
 
 
-#### Bundle with Webpack
+## Bundle with Webpack
 
 
-* Suppose you have installed Webpack. [install Webpack] https://webpack.js.org/guides/installation/ ...
+* I assume your are already familar with Webpack but if not see https://webpack.js.org/guides/getting-started/  and be sure to check out all the different options.
 
+* Now suppose you have installed Webpack. https://webpack.js.org/guides/installation/ 
 
 
 #### In dist/index.html
@@ -173,11 +174,12 @@ const Appref = $vibe.render(App, {
 Appref.$plugin.tip();
 ```
 
-#### bundle it
+#### bundle it to dist/main.js  with.
+
 ```
 npx webpack
 ```
-
+* Visit dist/index.html to test!
 
 
 
