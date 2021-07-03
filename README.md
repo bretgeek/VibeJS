@@ -26,6 +26,7 @@ const myComponent = () => {
         console.log('I am app')
     };
     
+    // If init exists it runs autmatically
     const init = function(e) {
     console.log('I am an '+e)
     e.$css('cursor: pointer;');  // can chain e.$funcs DOM functions too 
@@ -51,18 +52,17 @@ const myComponent = () => {
     }   
 }   
 
+```
+
 #### Render the component to a id with an id of "app" and save a reference to it as "myRef"
 
 
 ```
-
 // somewhere in your html
 <div id='app'> </div>
-
 ```
 
 ```
-
 const myRef = $vibe.render(myComponent, {
     to: '#app',
     position: 'append',
@@ -71,8 +71,6 @@ const myRef = $vibe.render(myComponent, {
  
 ```
 
-
-```
 
 #### More documentation/Usage/Tutorials coming soon.
 
