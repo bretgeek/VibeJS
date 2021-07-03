@@ -82,9 +82,12 @@ const myRef = $vibe.render(myComponent, {
 
 myRef.$css('display: inline-block').$text('Hey hey!');
 
+
+
 // Call the internal function you declared in the component
 
 myRef.$fn.func(); 
+
 
 
 // Tack on more events with $on 
