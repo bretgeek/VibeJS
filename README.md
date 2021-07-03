@@ -95,11 +95,10 @@ myRef.$fn.func();
 myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 ```
 
-##### Components can render other components too (hint: modules/import/export within components).
+* Components can render other components too (hint: modules/import/export within components).
 
 
 ## Bundle with Webpack
-
 
 * I assume your are already familar with Webpack but if not see https://webpack.js.org/guides/getting-started/  and be sure to check out all the different options.
 
