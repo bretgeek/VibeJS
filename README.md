@@ -184,4 +184,4 @@ npx webpack
 
 #### More documentation/usage/tutorials coming soon...
 
-Until then read the code!
+Until then, feel free to ask questions or read the code!
