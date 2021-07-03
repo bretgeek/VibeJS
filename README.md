@@ -100,7 +100,7 @@ myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 
 ## Bundle with Webpack
 
-* I assume your are already familar with Webpack but if not see https://webpack.js.org/guides/getting-started/  and be sure to check out all the different options.
+* I assume your are already familiar with Webpack but if not see https://webpack.js.org/guides/getting-started/  and be sure to check out all the different options.
 
 * Now suppose you have installed Webpack. https://webpack.js.org/guides/installation/ 
 
