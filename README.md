@@ -78,7 +78,7 @@ const myComponent = () => {
 <div id='app'> </div>
 ```
 
-* In an script tag after vibe.min.js:
+* In a script tag after vibe.min.js:
 ```
 // className, state, events, plugins (like fn of component) etc. can be added here too
 
