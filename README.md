@@ -37,7 +37,7 @@ const myComponent = () => {
     
     // init runs autmatically if it exists
 
-    const init = function(e) {
+    const init = function init(e) {
     console.log('I am an '+e)
     e.$css('cursor: pointer;').$text{'I am new text');  // can chain built-in e.$fns DOM methods! 
     }; 
