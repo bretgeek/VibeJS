@@ -1018,47 +1018,108 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
+
+  /**
+* parents
+* PARENTS
+* @description returns all parents and grandchildren of $self and optionally vibes them and run functions on them
+* @return {Array}
+*/
+  function parents( {str=false, fn=false, vibe=false, match=false} ) {
+    let stk = [];
+    let matcharr;
+    let els = $self;
+    // only parents that match selector string
+    if (isString(match)) {
+      matcharr = match.split(',');
+      while (els = els.parentElement) {
+        matcharr.forEach((m) => {
+          m = m.trim();
+          if (els.matches(m)) {
+            stk.push(els);
+            console.log(els.classList);
+          }
+        });
+      }
+    }
+    // all parents
+    if (!match) {
+      while (els = els.parentElement) {
+        stk.push(els);
+      }
+    }
+    // if stk has anything in it
+    if (stk.length) {
+      // make stack unique  since elements could have the same parent
+      stk = stk.filter((x, i, a) => a.indexOf(x) == i);
+
+
+      // vibe any matching parents
+      if (vibe) {
+        for ( const y of stk) {
+          y.$ = new Vibe(y);
+        }
+      }
+      // Run the function any matching parents
+      if (isFunction(fn)) {
+        for ( const y of stk) {
+          fn(y);
+        }
+      }
+    }
+    return stk;
+  }
+
+
   /**
 * children
 * CHILDREN
-* @description returns only direct children of $self
+* @description returns all children and grandchildren of $self and optionally vibes them and run functions on them
 * @return {Array}
 */
-  function children( {str=false, fn=false, vibe=true} = {} ) {
-    if (isDocument) {
-      return this;
+  function children( {match=false, fn=false, vibe=false} ) {
+    const stk = [];
+
+    let matcharr;
+
+    const els = $self;
+    const col = $self.getElementsByTagName('*');
+
+    // only parents that match selector string
+    if (isString(match)) {
+      matcharr = match.split(',');
+
+      for ( const y of col) {
+        matcharr.forEach((m) => {
+          if (y.matches(m) && !stk.includes(y)) {
+            stk.push(els);
+          }
+        });
+      }
     }
-    if (isString(str)) {
-      const carr = [];
-      console.log('str:'+ str);
-      for (let i = 0; i < $self.children.length; i++) {
-        if ($self.children[i].matches(str)) {
-          console.log('matches');
-          if (isFunction(fn)) {
-            fn($self.children[i]);
-          }
-          const child = $self.children[i];
-          if (vibe) {
-            child.$ = new Vibe(child);
-          }
-          carr.push(child);
+    // all parents
+    if (!match) {
+      for ( const y of col) {
+        stk.push(y);
+      }
+    }
+    // if stk has anything in it
+    if (stk.length) {
+      // vibe any matching children
+      if (vibe) {
+        for ( const y of stk) {
+          y.$ = new Vibe(y);
         }
       }
-      return carr;
-    } else {
+
+      // Run the function any matching children
       if (isFunction(fn)) {
-        for (let i = 0; i < $self.children.length; i++) {
-          if (isFunction(fn)) {
-            fn($self.children[i]);
-          }
-          if (vibe) {
-            $self.children[i].$ = new Vibe($self.children[i]);
-          }
-          carr.push($self.children[i]);
+        for ( const y of stk) {
+          fn(y);
         }
       }
-      return carr;
     }
+    return stk;
   }
 
 
@@ -1420,6 +1481,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     addClass: addClass,
     removeClass: removeClass,
     children: children,
+    parents: parents,
     before: before,
     insertBefore: insertBefore,
     insertAfter: insertAfter,
