@@ -10,7 +10,7 @@ See https://vibejs.com for more info.
 * Create self contained components for composing larger components and apps.
 * Optionally access components externally.
 * Rendered components receive built-in methods (the Vibe).
-* Familar syntax with built-in chainable DOM maniplution methods.
+* Easy Familiar syntax with built-in chainable DOM manipulation methods.
 * Pass in external functions or plugin functions to your rendered components.
 * Ability set up custom observers on rendered components.
 * Convert any element or HTML string to a Vibe'd element.
