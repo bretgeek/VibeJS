@@ -201,4 +201,4 @@ npx webpack
 
 #### More documentation/usage/tutorials coming soon...
 
-Until then, feel free to ask questions or read the code!
+Until then, feel free to ask questions, read the code or visit https://vibejs.com for lots more info.
