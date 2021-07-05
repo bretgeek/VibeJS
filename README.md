@@ -1,5 +1,6 @@
 
 ![VibeJS JavaScript Library](images/logo.jpg?raw=true "VibeJS")
+See https://vibejs.com for more info.
 
 # VibeJS
 * A small component based JavaScript library to build user interfaces and apps.
