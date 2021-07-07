@@ -1447,7 +1447,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
   /**
 * isTouch
 * @description is touch device?
-*@ returns boolean
+*@return {boolean}
 */
   function isTouch() {
     return window.matchMedia('(pointer: coarse)').matches || false;
@@ -1456,7 +1456,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
   /**
  *hidekbd
 * @description hides the keyboard on mobile devices for use when touching elements that are editable but you don't want the keyboard to show
-*@ returns this
+*@return {object}
 */
   function hidekbd() {
     setTimeout(function() {
@@ -1464,6 +1464,125 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     }, 100);
     return this;
   }
+
+
+  /**
+* getAtPt
+* GETATPT
+* @description Get element at ix, y coords
+*@return {boolean}
+*/
+  function getAtPt(x, y) {
+    return document.elementFromPoint(x, y);
+  }
+
+
+  /**
+* isTouching
+* ISTOUCHING
+* @description Is div1 touching div2?
+*@return {boolean}
+*/
+  function isTouching( $div1, $div2 ) {
+    const aRect = $div1.getBoundingClientRect();
+    const bRect = $div2.getBoundingClientRect();
+
+    return !(
+      ((aRect.top + aRect.height) < (bRect.top)) ||
+      (aRect.top > (bRect.top + bRect.height)) ||
+      ((aRect.left + aRect.width) < bRect.left) ||
+      (aRect.left > (bRect.left + bRect.width))
+    );
+  }
+
+
+  /**
+* drag
+* DRAG
+* @description Make elements dragabble, Example: myRef.$drag({draghandle: '.draggable', contain: '.maindrawn', drop: '.stop', dropfn: dropfn}); - where dropfn exists as:
+*   function dropfn({dragee=false, dropee=false} ){  console.log('DROPPED '+dragee.$text());  }
+*@return {object}
+*/
+  function drag({draghandle=false, contain='body', dropfn=false, drop=false} = {} ) {
+    const dragee = $self;
+    dragee.$css('position: absolute;');
+    let active = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+    const containment = document.querySelectorAll(contain)[0];
+    const parentContainer = dragee.parentNode || dragee.parentElement; // for dragEnd
+    const dragItem = dragee;
+    let dropEl;
+    if (drop && isString(drop) ) {
+      dropEl = document.querySelector(drop);
+    }
+
+    parentContainer.addEventListener('touchstart', dragStart, false);
+    parentContainer.addEventListener('touchend', dragEnd, false);
+    parentContainer.addEventListener('touchmove', doDrag, false);
+
+    parentContainer.addEventListener('mousedown', dragStart, false);
+    parentContainer.addEventListener('mouseup', dragEnd, false);
+    containment.addEventListener('mouseleave', dragEnd, false);
+    parentContainer.addEventListener('mousemove', doDrag, false);
+
+    function dragStart(e) {
+      if (e.type === 'touchstart') {
+        initialX = e.touches[0].clientX - xOffset;
+        initialY = e.touches[0].clientY - yOffset;
+      } else {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+      }
+
+      if (e.target.matches(draghandle) || !draghandle) {
+        e.target.style.cssText = 'user-select: none; cursor: pointer;';
+        active = true;
+      }
+    }
+
+    function dragEnd(e) {
+      // console.log('etype '+e.type)
+      initialX = currentX;
+      initialY = currentY;
+      if (dropEl && isTouching(dropEl, dragee) && active) {
+        dropfn({dragee: $self, dropee: dropEl} );
+        active = false;
+      }
+      active = false;
+    }
+
+    function doDrag(e) {
+      if (active) {
+        e.preventDefault();
+
+        if (e.type === 'touchmove') {
+          currentX = e.touches[0].clientX - initialX;
+          currentY = e.touches[0].clientY - initialY;
+        } else {
+          // console.log('currentX '+currentX)
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+        }
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        setTranslate(currentX, currentY, dragItem);
+      }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+      // console.log('xPos '+xPos)
+      el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
+    }
+    return this;
+  } // End drag
+
 
   /**
 * obj
@@ -1521,7 +1640,11 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     isObject: isObject,
     isElement: isElement,
     isArray: isArray,
+    isString: isString,
     isNumber: isNumber,
+    getAtPt: getAtPt,
+    isTouching: isTouching,
+    drag: drag,
   };
 
   // This allows you to do Appref.$text()

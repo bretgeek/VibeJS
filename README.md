@@ -6,15 +6,16 @@ See https://vibejs.com for more info.
 * A small component based JavaScript library to build user interfaces and apps.
 
 ## Features
-* Small - currently under 12KB minified.
+* Small - currently under 14KB minified.
 * Create self contained components for composing larger components and apps.
 * Optionally access components externally.
 * Rendered components receive built-in methods (the Vibe).
 * Easy Familiar syntax with built-in chainable DOM manipulation methods.
+* Built-in Drag and Drop
 * Pass in external functions or plugin functions to your rendered components.
 * Ability set up custom observers on rendered components.
 * Convert any element or HTML string to a Vibe'd element.
-* And more ... with more to come!
+* And more ...!
 
 ## Basic Usage
 
