@@ -1035,7 +1035,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       while (els = els.parentElement) {
         matcharr.forEach((m) => {
           m = m.trim();
-          if (els.matches(m)) {
+          if (els.matches(m) && !stk.includes(els) ) {
             stk.push(els);
             console.log(els.classList);
           }
@@ -1091,7 +1091,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       for ( const y of col) {
         matcharr.forEach((m) => {
-          if (y.matches(m) && !stk.includes(y)) {
+          m = m.trim();
+          if (y.matches(m) ) {
             stk.push(els);
           }
         });
@@ -1483,15 +1484,21 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
 * @description Is div1 touching div2?
 *@return {boolean}
 */
-  function isTouching( $div1, $div2 ) {
-    const aRect = $div1.getBoundingClientRect();
-    const bRect = $div2.getBoundingClientRect();
+  function isTouching({el=false, el2=false}) { // el2 is self if omitted
+    if (isDocument && !el2) { // you might want to call this with 2 params not on vibed (this lets you) OR with vibed elements where both params are not $self
+      return this;
+    }
+    if (!el2) {
+      el2=$self;
+    }
+    const elRect = el.getBoundingClientRect();
+    const el2Rect = el2.getBoundingClientRect();
 
     return !(
-      ((aRect.top + aRect.height) < (bRect.top)) ||
-      (aRect.top > (bRect.top + bRect.height)) ||
-      ((aRect.left + aRect.width) < bRect.left) ||
-      (aRect.left > (bRect.left + bRect.width))
+      ((elRect.top + elRect.height) < (el2Rect.top)) ||
+      (elRect.top > (el2Rect.top + el2Rect.height)) ||
+      ((elRect.left + elRect.width) < el2Rect.left) ||
+      (elRect.left > (el2Rect.left + el2Rect.width))
     );
   }
 
@@ -1503,9 +1510,8 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
 *   function dropfn({dragee=false, dropee=false} ){  console.log('DROPPED '+dragee.$text());  }
 *@return {object}
 */
-  function drag({draghandle=false, contain='body', dropfn=false, drop=false} = {} ) {
+  function drag({draghandle=false, contain='body', dropfn=false, drop=false, zIndex=1} = {} ) {
     const dragee = $self;
-    dragee.$css('position: absolute;');
     let active = false;
     let currentX;
     let currentY;
@@ -1531,6 +1537,11 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     parentContainer.addEventListener('mousemove', doDrag, false);
 
     function dragStart(e) {
+      // here we don't set dragee to absolute until dragging begins
+      const pos = dragee.$cs('position');
+      if (pos !== 'absolute') {
+        dragee.$css('position: absolute;');
+      }
       if (e.type === 'touchstart') {
         initialX = e.touches[0].clientX - xOffset;
         initialY = e.touches[0].clientY - yOffset;
@@ -1549,7 +1560,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
       // console.log('etype '+e.type)
       initialX = currentX;
       initialY = currentY;
-      if (dropEl && isTouching(dropEl, dragee) && active) {
+      if (dropEl && dragee.$isTouching({el: dropEl}) && active) {
         dropfn({dragee: $self, dropee: dropEl} );
         active = false;
       }
@@ -1582,6 +1593,75 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     }
     return this;
   } // End drag
+
+
+  function swipe({node=$self, drop=false, dropfn=false, upfn=false, downfn=false, leftfn=false, rightfn=false} = {}) {
+    // TODO do the directional fns  and send in $self to them
+
+    const container = node;
+    container.addEventListener('touchstart', startTouch, false);
+    container.addEventListener('touchmove', moveTouch, false);
+
+    // Swipe Up / Down / Left / Right
+    let initialX = null;
+    let initialY = null;
+
+    function startTouch(e) {
+      initialX = e.touches[0].clientX;
+      initialY = e.touches[0].clientY;
+    };
+
+    function moveTouch(e) {
+      if (initialX === null) {
+        return;
+      }
+
+      if (initialY === null) {
+        return;
+      }
+
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+
+      const diffX = initialX - currentX;
+      const diffY = initialY - currentY;
+
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+      // sliding horizontally
+        if (diffX > 0) {
+        // swiped left
+          if (isFunction(leftfn)) {
+            leftfn(node);
+          }
+        } else {
+        // swiped right
+          if (isFunction(rightfn)) {
+            rightfn(node);
+          }
+        }
+      } else {
+      // sliding vertically
+        if (diffY > 0) {
+        // swiped up
+          if (isFunction(upfn)) {
+            upfn(node);
+          }
+        } else {
+        // swiped down
+          if (isFunction(downfn)) {
+            downfn(node);
+          }
+        }
+      }
+
+      initialX = null;
+      initialY = null;
+
+      e.preventDefault();
+    };
+
+    return this;
+  }// End swipe
 
 
   /**
@@ -1645,6 +1725,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     getAtPt: getAtPt,
     isTouching: isTouching,
     drag: drag,
+    swipe: swipe,
   };
 
   // This allows you to do Appref.$text()

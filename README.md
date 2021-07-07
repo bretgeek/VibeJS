@@ -1,6 +1,6 @@
 
 ![VibeJS JavaScript Library](images/logo.jpg?raw=true "VibeJS")
-See https://vibejs.com for more info.
+See https://vibejs.com for ongoing documentation and info.
 
 # VibeJS
 * A small component based JavaScript library to build user interfaces and apps.
@@ -11,11 +11,11 @@ See https://vibejs.com for more info.
 * Optionally access components externally.
 * Rendered components receive built-in methods (the Vibe).
 * Easy Familiar syntax with built-in chainable DOM manipulation methods.
-* Built-in Drag and Drop
+* Built-in Drag and Drop, Swipe
 * Pass in external functions or plugin functions to your rendered components.
 * Ability set up custom observers on rendered components.
 * Convert any element or HTML string to a Vibe'd element.
-* And more ...!
+* And more ...
 
 ## Basic Usage
 
@@ -40,7 +40,7 @@ const myComponent = () => {
         console.log('I am app')
     };
     
-    // init runs autmatically if it exists
+    // init runs autmatically if it exists (and is in return object)
 
     const init = function init(e) {
     console.log('I am an '+e)
