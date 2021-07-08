@@ -2,6 +2,11 @@
 ![VibeJS JavaScript Library](images/logo.jpg?raw=true "VibeJS")
 See https://vibejs.com for ongoing documentation and info.
 
+
+[![Stargazers repo roster for @bretgeek/vibejs](https://reporoster.com/stars/bretgeek/vibejs)](https://github.com/bretgeek/vibejs/stargazers)
+
+
+
 # VibeJS
 * A small component based JavaScript library to build user interfaces and apps.
 
@@ -207,4 +212,3 @@ Until then, feel free to ask questions, read the code or visit https://vibejs.co
 
 
 
-[![Stargazers repo roster for @bretgeek/vibejs](https://reporoster.com/stars/bretgeek/vibejs)](https://github.com/bretgeek/vibejs/stargazers)
