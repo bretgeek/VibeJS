@@ -203,3 +203,8 @@ npx webpack
 #### More documentation/usage/tutorials coming soon...
 
 Until then, feel free to ask questions, read the code or visit https://vibejs.com for lots more info.
+
+
+
+
+[![Stargazers repo roster for @bretgeek/vibejs](https://reporoster.com/stars/bretgeek/vibejs)](https://github.com/bretgeek/vibejs/stargazers)
