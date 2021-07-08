@@ -1392,7 +1392,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * getobservers
 * GETOBSERVERS
-* @return list of names of observers
+* @description Get list of observers
+* @return {array}
 */
   function getobservers() {
     const ok = Object.keys($self.$observers);
@@ -1402,6 +1403,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * get
 * GET
+* @description Fetch data from URL via GET
+* @return {object}
  */
   async function get( {url = false, type = 'json', fn=false, e={}} = {} ) {
     const response = await fetch(url);
@@ -1419,30 +1422,47 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
 
-  /*
-  /// Sample Json fetch
- let url = 'https://jsonplaceholder.typicode.com/posts';
-function doJsonFetch(data, e ) {
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                let tdata = `${data[key].userId }`;
-               console.log(tdata);
-               //console.log(e.target);
-             }
-          }
-}
-h1.$get( {  url: url, fn: doJsonFetch, e: {target: h1}, }   );
+  /**
+* post
+* POST
+* @description post data to URL via POST
+* @return {object}
+ */
+  function post({url=false, type='text', body=false, contentType='application/x-www-form-urlencoded'}={}) {
+    // If contentType is urlencoded (default) you must formulate your body as a query string like:
+    // body = `title=${title}&blurb=${blurb}&image=${img}&link=${link}&admin=${adminval}`;
+    // Each template string variable like ${title} must be encoded like: let title = encodeURIComponent('New Pirate Captain');
+    // Which can also be done inline like:
+    // body = 'title=' + encodeURIComponent('New Pirate Captain') + '&body=' + encodeURIComponent('Arrrrrr-ent you excited?') + '&userID=3';
 
-  /// Sample text fetch
-function doTextFetch(data, e ) {
-               // console.log(data);
-               // OR
-               console.log(JSON.parse(data));
-}
+    if (!url || !body) {
+      return false;
+    }
 
-h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
+    fetch(url, {
 
-*/
+      headers: new Headers({
+        'Content-Type': `${contentType}`, // <-- Specifying the Content-Type
+      }),
+      method: 'post',
+      body: body,
+
+
+    }).then(function(response) {
+      if (response.ok) {
+        if (type === 'json') {
+          return response.json();
+        } else {
+          return response.text();
+        }
+      }
+      return Promise.reject(response);
+    }).then(function(data) {
+      console.log(data);
+    }).catch(function(error) {
+      console.warn('Something went wrong.', error);
+    });
+  } // End post
 
 
   /**
@@ -1674,6 +1694,7 @@ h1.$get( {  url: url, fn: doTextFetch, type: 'text',  e: {target: h1}, }   );
     clone: clone,
     ready: ready,
     get: get,
+    post: post,
     css: css,
     isTouch: isTouch,
     rpx: rpx,
