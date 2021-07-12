@@ -30,15 +30,14 @@ If you are looking for an alternative to bigger libraries like VueJS and React w
 
 #### Add Vibe to your page before closing body tag :
 
-```
+```html
 <script src='https://yoururl.com/vibe.min.js'></script>
-
 ```
 
 
 #### Make a component with a function: (in a script tag or external.js/bundle.js)
 
-```
+```js
 const myComponent = () => {
 
     const template = `<div>Hey, I am app!</div>`;
@@ -75,34 +74,32 @@ const myComponent = () => {
         state: state
     }   
 }   
-
 ```
 
 #### Render the component to a DIV with an id of "app" and save a reference to it as "myRef"
 
 * In an html file:
-```
+```html
 // somewhere in your html
 
 <div id='app'> </div>
 ```
 
 * In a script tag after vibe.min.js:
-```
+```js
 // className, state, events, plugins (like fn of component) etc. can be added here too
 
 const myRef = $vibe.render(myComponent, {
     to: '#app',
     position: 'append',
     className: 'renderedComponent',
-});     
- 
+});
 ```
  * Note: You can render a component as many times as you want with different reference names.
 
 
 #### Components are self contained however, after rendering you can also do things with the reference ( "myRef" in this case)  like:
-```
+```js
 // Call built-in Vibe functions to change the css and the text etc. (chainable).
 
 myRef.$css('display: inline-block').$text('Hey hey!');
@@ -132,7 +129,7 @@ myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 
 #### In dist/index.html
 
-```
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -151,7 +148,7 @@ myRef.$on('click', function(){ console.log('my Text is: '+this.$text()) });
 
 #### In /src/App.js
 
-```
+```js
 export const App = () => {
 
     const template = '<div>I am app!</div>';
@@ -186,7 +183,7 @@ export const App = () => {
 
 #### In /src/index.js
 
-```
+```js
 import {App} from '/src/App.js';
 
 function tip() {console.log('tip') };
