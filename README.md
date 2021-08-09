@@ -50,7 +50,7 @@ const myComponent = () => {
 
     const init = function init(e) {
     console.log('I am an '+e)
-    e.$css('cursor: pointer;').$text{'I am new text');  // can chain built-in e.$fns DOM methods! 
+    e.$css('cursor: pointer;').$text('I am new text');  // can chain built-in e.$fns DOM methods! 
     }; 
     
     const click = function click(e) {
