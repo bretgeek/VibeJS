@@ -1499,6 +1499,25 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* pager
+* PAGER
+* @description Get page from url
+*@return {string}
+*/
+  function pager(num=0) {
+    let upath = window.location.pathname;
+    const fullpath = upath;
+    upath = upath.split('/');
+    const path = upath[num];
+    if (path.length && num > 0) {
+      return path;
+    } else {
+      return fullpath;
+    }
+  }
+
+
+  /**
 * isTouching
 * ISTOUCHING
 * @description Is div1 touching div2?
@@ -1735,6 +1754,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     trigger: trigger,
     html: html,
     text: text,
+    pager: pager,
     getState: getState,
     setState: setState,
     isFunction: isFunction,
