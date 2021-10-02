@@ -1022,7 +1022,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * parents
 * PARENTS
-* @description returns all parents and grandchildren of $self and optionally vibes them and run functions on them
+* @description returns all parents and grandparents of $self and optionally vibes them and run functions on them
 * @return {Array}
 */
   function parents( {str=false, fn=false, vibe=false, match=false} ) {
