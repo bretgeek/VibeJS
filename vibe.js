@@ -382,7 +382,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   function select(str, {
     all = false,
-    vibe = false,
+    vibe = true,
   } = {}) {
     if (!all) {
       // Only return first
