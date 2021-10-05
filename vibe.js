@@ -389,7 +389,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       const single = $self.querySelectorAll(str)[0];
       if (single) {
         if (vibe) {
-          single.$ = new Vibe(single);
+          single.$ = Vibe().render(single);
         }
         return single;
       } else {
@@ -400,7 +400,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (collection.length) {
         if (vibe) {
           collection.forEach((e) => {
-            e.$ = new Vibe(e);
+            e.$ = Vibe().render(e);
           });
         }
 
