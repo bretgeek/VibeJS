@@ -383,6 +383,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   function select(str, {
     all = false,
     vibe = true,
+    fn = false,
   } = {}) {
     if (!all) {
       // Only return first
@@ -390,6 +391,10 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (single) {
         if (vibe) {
           single.$ = Vibe().render(single);
+        }
+
+        if (isFunction(fn)) {
+          fn(single);
         }
         return single;
       } else {
@@ -401,6 +406,12 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (vibe) {
           collection.forEach((e) => {
             e.$ = Vibe().render(e);
+          });
+        }
+
+        if (isFunction(fn)) {
+          collection.forEach( (c) => {
+            fn(c);
           });
         }
 
@@ -1459,6 +1470,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       return Promise.reject(response);
     }).then(function(data) {
       console.log(data);
+      // TODO return data
     }).catch(function(error) {
       console.warn('Something went wrong.', error);
     });
