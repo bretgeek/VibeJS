@@ -387,7 +387,14 @@ function Vibe($self = document, {fn={}} = {} ) {
   } = {}) {
     if (!all) {
       // Only return first
-      const single = $self.querySelectorAll(str)[0];
+      let single = false;
+      if (str.startsWith('#')) {
+        str = str.replace(/#/, '');
+        single = document.getElementById(str);
+      } else {
+        single = $self.querySelectorAll(str)[0];
+      }
+
       if (single) {
         if (vibe) {
           single.$ = Vibe().render(single);
