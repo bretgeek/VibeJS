@@ -1723,6 +1723,20 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* load
+* LOAD
+* @description Run fn on window load
+*@return this
+*/
+  function load(fn) {
+    if (isFunction(fn)) {
+      window.addEventListener('load', fn, true);
+    }
+    return this;
+  }
+
+
+  /**
 * obj
 * RETURN OBJ
 */
@@ -1786,6 +1800,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     isTouching: isTouching,
     drag: drag,
     swipe: swipe,
+    load: load,
   };
 
   // This allows you to do Appref.$text()
