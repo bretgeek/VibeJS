@@ -782,14 +782,18 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description set the inline css of an element
 *@return this and is chainable
 */
-  function css(str) {
+  function css(str, {add=true}={} ) {
     if (isDocument) {
       return this;
     }
     if (!str) {
       return this;
     }
-    $self.style.cssText = str;
+    if (!add) {
+      $self.style.cssText = str;
+    } else {
+      $self.style.cssText = $self.style.cssText + str;
+    }
     return this;
   }
 
