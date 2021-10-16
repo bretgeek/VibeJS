@@ -1742,7 +1742,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /**
 * scroll
-* scroll
+* SCROLL
 * @description Run fn on window load
 *@return this
 */
