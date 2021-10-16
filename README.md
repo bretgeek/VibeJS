@@ -12,7 +12,7 @@ See https://vibejs.com for ongoing documentation and info.
 
 If you are looking for an alternative to bigger libraries like VueJS and React with a much easier learning curve or a general purpose alternative to JQuery with a much smaller footprint, then VibeJS may just be what you need.
 
-Visit https://vibejs.com for updates ande info.
+Visit *https://vibejs.com* for updates and info.
 
 ## Features
 * Small - currently under ~15KB minified.
