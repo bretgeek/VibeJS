@@ -1741,6 +1741,20 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* scroll
+* scroll
+* @description Run fn on window load
+*@return this
+*/
+  function scroll(fn) {
+    if (isFunction(fn)) {
+      window.addEventListener('scroll', fn, true);
+    }
+    return this;
+  }
+
+
+  /**
 * obj
 * RETURN OBJ
 */
@@ -1805,6 +1819,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     drag: drag,
     swipe: swipe,
     load: load,
+    scroll: scroll,
   };
 
   // This allows you to do Appref.$text()
