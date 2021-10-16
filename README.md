@@ -10,7 +10,7 @@ See https://vibejs.com for ongoing documentation and info.
 # VibeJS
 * A small component based JavaScript library to build user interfaces and apps.
 
-If you are looking for an alternative to bigger libraries like VueJS and React with a much easier learning curve or eva general purpose alternative to JQuery, then VibeJS may just be what you need.
+If you are looking for an alternative to bigger libraries like VueJS and React with a much easier learning curve or a general purpose alternative to JQuery with a much smaller footprint, then VibeJS may just be what you need.
 
 ## Features
 * Small - currently under ~15KB minified.
