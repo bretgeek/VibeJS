@@ -1511,12 +1511,37 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+ *requestInterval
+ *REQUESTINTERVAL
+* @description replacement for setInterval for smooth animations
+* @return {object}
+* @usage
+* intv = requestInterval(function(){console.log('interval1')},2000);
+* intv.clear()
+*/
+  window.requestInterval=function(callback, delay) {
+    const dateNow=Date.now;
+    const requestAnimation=window.requestAnimationFrame;
+    let start=dateNow();
+    let stop;
+    var intervalFunc=function() {
+      dateNow()-start<delay||(start+=delay, callback());
+      stop||requestAnimation(intervalFunc);
+    };
+    requestAnimation(intervalFunc);
+    return {
+      clear: function() {
+        stop=1;
+      },
+    };
+  };
+
+  /**
  *fadein
  *FADEIN
 * @description fade in an element with speed in milliseconds and an option display setting to end with
 *@return {object}
 */
-  // TODO make this into show and hide
   function fadeIn({display='block', speed=300}={}) {
     function f() {
       const cdisp = $self.$cs('display');
@@ -1526,7 +1551,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       $self.$css(`display: ${display}; visibility: visible;`, {add: true});
 
       let opa = 0;
-      const intv = setInterval(function() {
+      // let intv = setInterval(function(){
+      const intv = requestInterval(function() {
         opa++;
         if (opa <= 9) {
           $self.$css(`opacity: 0.${opa} `, {add: true});
@@ -1535,7 +1561,8 @@ function Vibe($self = document, {fn={}} = {} ) {
           $self.$css(`opacity: ${opa} `, {add: true});
           $self.$isrun = false;
           $self.$runq();
-          clearInterval(intv);
+          // clearInterval(intv);
+          intv.clear();
         }
       }, speed);
     }
@@ -1565,7 +1592,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       $self.$css(`display: ${display}; visibility: visible;`, {add: true});
 
       let opa = 1;
-      const intv = setInterval(function() {
+      // let intv = setInterval(function(){
+      const intv = requestInterval(function() {
         if (opa > 0.1) {
           opa -= 0.1;
           opa = opa.toFixed(2);
@@ -1576,7 +1604,8 @@ function Vibe($self = document, {fn={}} = {} ) {
           $self.$css(`opacity: ${opa} `, {add: true});
           $self.$isrun = false;
           $self.$runq();
-          clearInterval(intv);
+          // clearInterval(intv);
+          intv.clear();
         }
       }, speed);
     }
@@ -1627,7 +1656,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       const d = new Date();
       const fut = d.getTime()+time;
       // console.log(`d is ${d.getTime()} fut is ${fut}`)
-      const intv = setInterval(function() {
+      // let intv = setInterval(function(){
+      const intv = requestInterval(function() {
         const newd = new Date();
         if (newd.getTime() >= fut) {
           // console.log('I was delayed')
@@ -1636,7 +1666,8 @@ function Vibe($self = document, {fn={}} = {} ) {
           }
           $self.$isrun = false;
           $self.$runq();
-          clearInterval(intv);
+          // clearInterval(intv)
+          intv.clear();
         }
       }, 1);
     }
