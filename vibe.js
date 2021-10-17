@@ -1511,6 +1511,167 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+ *fadein
+ *FADEIN
+* @description fade in an element with speed in milliseconds and an option display setting to end with
+*@return {object}
+*/
+  // TODO make this into show and hide
+  function fadeIn({display='block', speed=300}={}) {
+    function f() {
+      const cdisp = $self.$cs('display');
+      // start out hidden;
+      $self.$css(`display: ${cdisp}; visibility: visible; opacity: 0.0;`, {add: true});
+
+      $self.$css(`display: ${display}; visibility: visible;`, {add: true});
+
+      let opa = 0;
+      const intv = setInterval(function() {
+        opa++;
+        if (opa <= 9) {
+          $self.$css(`opacity: 0.${opa} `, {add: true});
+        } else {
+          opa=1;
+          $self.$css(`opacity: ${opa} `, {add: true});
+          $self.$isrun = false;
+          $self.$runq();
+          clearInterval(intv);
+        }
+      }, speed);
+    }
+
+    $self.$q.push(f);
+    // gotta kickit off
+    if ($self.$q.length) {
+      $self.$runq();
+    }
+
+    return this;
+  } // end fadeIn
+
+
+  /**
+ *fadeOut
+ *FADEOUT
+* @description fade out an element with speed in milliseconds and an option display setting to end with
+*@return {object}
+*/
+  function fadeOut({display='block', speed=300}={}) {
+    function f() {
+      const cdisp = $self.$cs('display');
+      // start out visible;
+      $self.$css(`display: ${cdisp}; visibility: visible; opacity: 1;`, {add: true});
+
+      $self.$css(`display: ${display}; visibility: visible;`, {add: true});
+
+      let opa = 1;
+      const intv = setInterval(function() {
+        if (opa > 0.1) {
+          opa -= 0.1;
+          opa = opa.toFixed(2);
+          // console.log('opa is '+opa);
+          $self.$css(`opacity: ${opa} `, {add: true});
+        } else {
+          opa=0;
+          $self.$css(`opacity: ${opa} `, {add: true});
+          $self.$isrun = false;
+          $self.$runq();
+          clearInterval(intv);
+        }
+      }, speed);
+    }
+
+    $self.$q.push(f);
+    // gotta kickit off
+    if ($self.$q.length) {
+      $self.$runq();
+    }
+
+    return this;
+  } // end fadeOut
+
+
+  /**
+*show
+*show
+* @description show and element
+*@return {object}
+*/
+  function show() {
+    $self.$fadeIn({speed: 1});
+    return this;
+  }
+
+
+  /**
+*hide
+*HIDE
+* @description hide and element
+*@return {object}
+*/
+  function hide() {
+    $self.$fadeOut({speed: 1});
+    return this;
+  }
+
+
+  /**
+*delay
+*DELAY
+* @description delay exection of next chained function and run optional funtion
+*@return {object}
+*/
+  function delay( {time=1000, fn=false}) {
+    function f() {
+      // console.log('running delay func')
+      const d = new Date();
+      const fut = d.getTime()+time;
+      // console.log(`d is ${d.getTime()} fut is ${fut}`)
+      const intv = setInterval(function() {
+        const newd = new Date();
+        if (newd.getTime() >= fut) {
+          // console.log('I was delayed')
+          if (isFunction(fn)) {
+            fn($self);
+          }
+          $self.$isrun = false;
+          $self.$runq();
+          clearInterval(intv);
+        }
+      }, 1);
+    }
+    $self.$q.push(f);
+    // gotta kickit off
+    if ($self.$q.length) {
+      $self.$runq();
+    }
+
+
+    return this;
+  }
+
+
+  /**
+*runq
+*RUNQ
+* @description A poorman's queue - each chained function that calls run must set $self.isrun to false when done running
+*@return null
+*/
+  function runq() {
+    let fn;
+    if (!$self.$isrun) {
+      $self.$isrun = true;
+      fn = $self.$q.shift();
+      if (isFunction(fn)) {
+        fn();
+        runq();
+      }
+    }
+    return null;
+  }
+
+
+  /**
 * getAtPt
 * GETATPT
 * @description Get element at ix, y coords
@@ -1820,6 +1981,14 @@ function Vibe($self = document, {fn={}} = {} ) {
     swipe: swipe,
     load: load,
     scroll: scroll,
+    show: show,
+    hide: hide,
+    delay: delay,
+    fadeIn: fadeIn,
+    fadeOut: fadeOut,
+    q: [],
+    runq: runq,
+    isrun: false,
   };
 
   // This allows you to do Appref.$text()
