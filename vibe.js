@@ -1457,6 +1457,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     // Which can also be done inline like:
     // body = 'title=' + encodeURIComponent('New Pirate Captain') + '&body=' + encodeURIComponent('Arrrrrr-ent you excited?') + '&userID=3';
 
+    $self.isPost = false;
     if (!url || !body) {
       return false;
     }
@@ -1481,7 +1482,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       return Promise.reject(response);
     }).then(function(data) {
       console.log(data);
-      // TODO return data
+      $self.isPost = true;
     }).catch(function(error) {
       console.warn('Something went wrong.', error);
     });
