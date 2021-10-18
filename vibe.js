@@ -1536,6 +1536,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     };
   };
 
+
   /**
  *fadein
  *FADEIN
@@ -1566,6 +1567,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
       }, speed);
     }
+
 
     $self.$q.push(f);
     // gotta kickit off
@@ -1694,7 +1696,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       $self.$isrun = true;
       fn = $self.$q.shift();
       if (isFunction(fn)) {
-        fn();
+        fn($self);
         runq();
       }
     }
@@ -2020,6 +2022,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     q: [],
     runq: runq,
     isrun: false,
+    animate: animate,
   };
 
   // This allows you to do Appref.$text()
