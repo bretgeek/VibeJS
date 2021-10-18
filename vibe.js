@@ -1540,21 +1540,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     };
   };
 
-
-  /*
-  function poll( { prop=false, wait=3000}={} ){
-    let d = new Date();
-    let start = d.getTime();
-
-    let intv = requestInterval(function(){
-    let now = new Date().getTime();
-     if(now >= start + time){
-     int.clear();
-     }
-      }, 50);
-   }
-*/
-
   /**
  *fadein
  *FADEIN
