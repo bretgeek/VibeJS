@@ -1450,7 +1450,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description post data to URL via POST
 * @return {object}
  */
-  function post({url=false, type='text', body=false, contentType='application/x-www-form-urlencoded'}={}) {
+  function post({url=false, type='text', body=false, contentType='application/x-www-form-urlencoded', fn=false}={}) {
     // If contentType is urlencoded (default) you must formulate your body as a query string like:
     // body = `title=${title}&blurb=${blurb}&image=${img}&link=${link}&admin=${adminval}`;
     // Each template string variable like ${title} must be encoded like: let title = encodeURIComponent('New Pirate Captain');
@@ -1481,8 +1481,11 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
       return Promise.reject(response);
     }).then(function(data) {
-      console.log(data);
-      $self.isPost = true;
+      // console.log(data);
+      $self.isPost = true; // for checking if post was a sucess
+      if (isFunction(fn)) {
+        fn(data); // run fn on data
+      }
     }).catch(function(error) {
       console.warn('Something went wrong.', error);
     });
@@ -1537,6 +1540,20 @@ function Vibe($self = document, {fn={}} = {} ) {
     };
   };
 
+
+  /*
+  function poll( { prop=false, wait=3000}={} ){
+    let d = new Date();
+    let start = d.getTime();
+
+    let intv = requestInterval(function(){
+    let now = new Date().getTime();
+     if(now >= start + time){
+     int.clear();
+     }
+      }, 50);
+   }
+*/
 
   /**
  *fadein
