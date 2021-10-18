@@ -1952,6 +1952,21 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* w
+* W
+* @description shortcut for adding and removing events on window
+*@return this
+*/
+  function w(str, fn, remove=false) {
+    if (remove) {
+      window.removeEventListener(str, fn, true);
+    } else {
+      window.addEventListener(str, fn, true);
+    }
+    return this;
+  }
+
+  /**
 * obj
 * RETURN OBJ
 */
@@ -2025,6 +2040,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     q: [],
     runq: runq,
     isrun: false,
+    w: w,
   };
 
   // This allows you to do Appref.$text()
