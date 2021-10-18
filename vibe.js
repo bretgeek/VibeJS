@@ -14,7 +14,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     isDocument = true;
   }
 
-
   let vibeloaded = false;
   if (isDocument) {
     (function ready() {
