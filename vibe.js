@@ -2022,7 +2022,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     q: [],
     runq: runq,
     isrun: false,
-    animate: animate,
   };
 
   // This allows you to do Appref.$text()
