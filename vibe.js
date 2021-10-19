@@ -1215,7 +1215,9 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
-  /** uuidv4
+
+  /**
+* uuidv4
 * UUIDV4
 * @description generate uuidv4 id string
 * @return string
@@ -1242,7 +1244,8 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
-  /** filterString
+  /**
+* filterString
 * FILTERSTRING
 * @description generate uuidv4 id string
 * @return string
@@ -1272,7 +1275,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
 
-  /** addplug
+  /**
+* addplug
 * ADDPLUG
 * @description Not recommended for use the prefered way to add a plug is component level or at component render obj
 * @return this
@@ -1304,7 +1308,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /**
-*setState
+* setState
 * SETSTATE
 * @description set state of $self
 * @return obj
