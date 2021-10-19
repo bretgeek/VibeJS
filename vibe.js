@@ -14,6 +14,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     isDocument = true;
   }
 
+
   let vibeloaded = false;
   if (isDocument) {
     (function ready() {
@@ -1150,7 +1151,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isString
 * ISSTRING
-@return boolean
+* @description check if string is a string
+* @return boolean
 */
   function isString(thing) {
     return typeof thing === 'string';
@@ -1159,7 +1161,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isNumber
 * ISNUMBER
-@return boolean
+* @description check if string is a number
+* @return boolean
 */
   function isNumber(value) {
     return /^-{0,1}\d+$/.test(value);
@@ -1168,7 +1171,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isFunction
 * ISFUNCTION
-@return boolean
+* @description check if parameter is a function
+* @return boolean
 */
   function isFunction(thing) {
     return typeof thing === 'function';
@@ -1177,7 +1181,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isObject
 * ISOBJECT
-@return boolean
+* @description check if parameter is an object
+* @return boolean
 */
   function isObject(thing) {
     // arrays are objects too so use isArray if you want to find arrays
@@ -1187,7 +1192,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * isElement
 * ISELEMENT
-@return boolean
+* @description check if parameter is a DOM element
+* @return boolean
 */
   function isElement(thing) {
     // arrays are objects too so use isArray if you want to find arrays
@@ -1196,9 +1202,10 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
-* isArray*
+* isArray
 * ISARRAY
-@return boolean
+* @description check if parameter is an array
+* @return boolean
 */
   function isArray(thing) {
     if (Array.isArray(thing)) {
@@ -1210,9 +1217,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /** uuidv4
 * UUIDV4
-* isArray*
-* ISARRAY
-@return uuid4v
+* @description generate uuidv4 id string
+* @return string
 */
   function uuidv4() {
     if (isObject(crypto)) {
@@ -1237,7 +1243,9 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /** filterString
-* FILTERSTRING filter strings
+* FILTERSTRING
+* @description generate uuidv4 id string
+* @return string
 */
 
   function filterString(str, strict=false) {
@@ -1253,6 +1261,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * id
 * ID
+* @description get this element's id
 * @return id
 */
   function id() {
@@ -1265,7 +1274,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /** addplug
 * ADDPLUG
-* Not recommended for use the prefered way to add a plug is component level or at component render obj
+* @description Not recommended for use the prefered way to add a plug is component level or at component render obj
+* @return this
 */
   function addplug(fn) {
     if (isFunction(fn)) {
@@ -1283,6 +1293,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /**
 * run
+* @description run a function
 * @return this
 */
   function run(fn) {
@@ -1295,6 +1306,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 *setState
 * SETSTATE
+* @description set state of $self
 * @return obj
 */
   function setState(obj ={}) {
@@ -1307,6 +1319,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * getState
 * GETSTATE
+* @description get state of $self
+* @return obj
 */
   function getState(str) {
     if (isDocument) {
@@ -1319,6 +1333,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * observe
 * OBSERVE
+* @description observer generator
+* @return obj
 */
   function observe(fn, name = 'name', {delay=10, child=true, attr=true, subtree=false, attrs=['none'], chardat=false, attrsOV=false, chardatOV=false} ) {
     // keep a record of observers in an object of global var or component so we can disconnect them later
@@ -1389,6 +1405,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * unobserve
 * UNOBSERVE
+* @description unobserve element
 */
 
   function unobserve(name='name') {
