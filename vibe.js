@@ -1993,6 +1993,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   const obj = {
     fn: fn,
     id: id,
+    uuid: uuidv4,
     clone: clone,
     ready: ready,
     get: get,
