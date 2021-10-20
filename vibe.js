@@ -1986,8 +1986,14 @@ function Vibe($self = document, {fn={}} = {} ) {
     return this;
   }
 
+
+  /**
+*_pipe
+* @description the actual internal pipe function
+* @return result
+*/
   function _pipe(...fns) {
-    console.log(fns);
+  // console.log(fns)
     return (arg) => fns.reduce((prev, fn) => fn(prev), arg);
   }
 
