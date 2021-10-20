@@ -1986,9 +1986,36 @@ function Vibe($self = document, {fn={}} = {} ) {
     return this;
   }
 
+  function _pipe(...fns) {
+    console.log(fns);
+    return (arg) => fns.reduce((prev, fn) => fn(prev), arg);
+  }
+
+
+  /**
+* pipe
+* PIPE
+* @description - pipe the result of a function through series of functions
+* @usage h1.$pipe({fn:foo}).$pipe({fn:fee}).$pipe({fn: fi}).$pipe({end:true});
+* @return function
+*/
+  function pipe({end=false, fn=()=>{}} = {} ) {
+    if (isFunction(fn)) {
+      $self.$stream.push(fn);
+    }
+    if (end) {
+      const p = _pipe(...$self.$stream);
+      return p();
+    } else {
+      return this;
+    }
+  }
+
+
   /**
 * obj
 * RETURN OBJ
+* @return {object}
 */
   const obj = {
     fn: fn,
@@ -2062,6 +2089,8 @@ function Vibe($self = document, {fn={}} = {} ) {
     runq: runq,
     isrun: false,
     w: w,
+    pipe: pipe,
+    stream: [],
   };
 
   // This allows you to do Appref.$text()
