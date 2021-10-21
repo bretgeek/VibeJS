@@ -2019,6 +2019,151 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* getEase
+* @description utility to return easing function based on string name
+* @return {function}
+*/
+  function getEase(str) {
+    switch (str) {
+      case 'bounceEaseOut':
+        return bounceEaseOut;
+        break;
+
+      default:
+        return bounceEaseOut;
+        break;
+    }
+  }
+
+  /**
+* animate
+* @description Animate various properties and run optional function on complete
+* @return {this}
+*/
+  function animate( options) {
+    // get easing from getEase
+    const easing = getEase(options.easing);
+
+    // done
+    let done = false;
+    if (options.done) {
+      done = options.done;
+    }
+
+
+    // directions
+    let dir = false;
+    let amt = false;
+    let unit = false;
+    if (options.move) {
+      dir = options.move.dir || 'right';
+      amt = options.move.amt || 0;
+      unit = options.move.unit || 'px';
+    }
+
+    let move;
+    if (dir ==='left') {
+      move = function(progress) {
+        $self.$css(`left:  -${Math.round(progress * amt)}px`);
+      };
+    }
+
+    if (dir ==='right') {
+      move = function(progress) {
+        $self.$css(`left:  ${Math.round(progress * amt)}${unit}`);
+      };
+    }
+
+    if (dir ==='down') {
+      move = function(progress) {
+        $self.$css(`top:  ${Math.round(progress * amt)}${unit}`);
+      };
+    }
+
+
+    if (dir ==='up') {
+      move = function(progress) {
+        $self.$css(`bottom:  ${Math.round(progress * amt)}${unit}`);
+      };
+    }
+
+    // animate opacity
+
+    let opacitydir = false;
+    if (options.prop) {
+      opacitydir = options.prop.opacity || 'pos';
+    }
+
+    if (opacitydir ==='pos') {
+      move = function(progress) {
+        $self.$css(`opacity:  ${progress};`);
+      };
+    }
+
+
+    const cpos = $self.$cs('position');
+    // console.log(cpos)
+    // start out change to relative if static - only do this with easing functions
+    if (cpos === 'static' && easing) {
+      $self.$css(`position: relative;`);
+    }
+
+    const start = performance.now();
+
+    requestAnimationFrame(function animate(time) {
+    // timeFraction от 0 до 1
+      let timeFraction = (time - start) / options.duration;
+      if (timeFraction > 1) timeFraction = 1;
+
+      const progress = easing(timeFraction);
+
+      // options.move($self, progress);
+      move(progress);
+
+      if (timeFraction < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        if (isFunction(done)) {
+          done();
+        }
+      }
+    });
+    return this;
+  }
+
+
+  /*
+* Begin easing functions
+*?
+
+
+  /**
+* makeEaseOut
+* @description Easing utility function
+* @return {function}
+*/
+  function makeEaseOut(timing) {
+    return function(timeFraction) {
+      return 1 - timing(1 - timeFraction);
+    };
+  }
+
+  /**
+* bounce
+* @description Easing utility function
+* @return {function}
+*/
+  function bounce(timeFraction) {
+    for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
+      if (timeFraction >= (7 - 4 * a) / 11) {
+        return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+      }
+    }
+  }
+
+  var bounceEaseOut = makeEaseOut(bounce);
+
+  /**
 * obj
 * RETURN OBJ
 * @return {object}
@@ -2097,6 +2242,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     w: w,
     pipe: pipe,
     stream: [],
+    animate: animate,
   };
 
   // This allows you to do Appref.$text()
