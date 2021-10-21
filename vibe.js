@@ -2017,24 +2017,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
-
-  /**
-* getEase
-* @description utility to return easing function based on string name
-* @return {function}
-*/
-  function getEase(str) {
-    switch (str) {
-      case 'bounceEaseOut':
-        return bounceEaseOut;
-        break;
-
-      default:
-        return bounceEaseOut;
-        break;
-    }
-  }
-
   /**
 * animate
 * @description Animate various properties and run optional function on complete
@@ -2055,37 +2037,42 @@ function Vibe($self = document, {fn={}} = {} ) {
     let dir = false;
     let amt = false;
     let unit = false;
-    if (options.move) {
+    let move;
+
+    if (options.move && isFunction(options.move)) {
+      move = options.move;
+    }
+
+    if (options.move && !isFunction(options.move)) {
       dir = options.move.dir || 'right';
       amt = options.move.amt || 0;
       unit = options.move.unit || 'px';
-    }
 
-    let move;
-    if (dir ==='left') {
-      move = function(progress) {
-        $self.$css(`left:  -${Math.round(progress * amt)}px`);
-      };
-    }
+      if (dir ==='left') {
+        move = function(progress) {
+          $self.$css(`left:  -${Math.round(progress * amt)}px`);
+        };
+      }
 
-    if (dir ==='right') {
-      move = function(progress) {
-        $self.$css(`left:  ${Math.round(progress * amt)}${unit}`);
-      };
-    }
+      if (dir ==='right') {
+        move = function(progress) {
+          $self.$css(`left:  ${Math.round(progress * amt)}${unit}`);
+        };
+      }
 
-    if (dir ==='down') {
-      move = function(progress) {
-        $self.$css(`top:  ${Math.round(progress * amt)}${unit}`);
-      };
-    }
+      if (dir ==='down') {
+        move = function(progress) {
+          $self.$css(`top:  ${Math.round(progress * amt)}${unit}`);
+        };
+      }
 
 
-    if (dir ==='up') {
-      move = function(progress) {
-        $self.$css(`bottom:  ${Math.round(progress * amt)}${unit}`);
-      };
-    }
+      if (dir ==='up') {
+        move = function(progress) {
+          $self.$css(`bottom:  ${Math.round(progress * amt)}${unit}`);
+        };
+      }
+    } // end if options.move
 
     // animate opacity
 
@@ -2117,8 +2104,11 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       const progress = easing(timeFraction);
 
-      // options.move($self, progress);
-      move(progress);
+      if (options.move && isFunction(options.move)) {
+        move($self, progress);
+      } else {
+        move(progress);
+      }
 
       if (timeFraction < 1) {
         requestAnimationFrame(animate);
@@ -2134,7 +2124,34 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /*
 * Begin easing functions
-*?
+*/
+
+  /**
+* getEase
+* @description utility to return easing function based on string name
+* @return {function}
+*/
+  function getEase(str) {
+    switch (str) {
+      case 'bounceEaseOut':
+        return bounceEaseOut;
+        break;
+
+
+      case 'bounceEaseInOut':
+        return bounceEaseInOut;
+        break;
+
+      case 'bounce':
+        return bounce;
+        break;
+
+
+      default:
+        return bounceEaseOut;
+        break;
+    }
+  }
 
 
   /**
@@ -2162,6 +2179,24 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   var bounceEaseOut = makeEaseOut(bounce);
+
+  /**
+* makeEaseInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function makeEaseInOut(timing) {
+    return function(timeFraction) {
+      if (timeFraction < .5) {
+        return timing(2 * timeFraction) / 2;
+      } else {
+        return (2 - timing(2 * (1 - timeFraction))) / 2;
+      }
+    };
+  }
+
+  var bounceEaseInOut = makeEaseInOut(bounce);
+
 
   /**
 * obj
