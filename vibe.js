@@ -433,12 +433,18 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * rpx
 * RPX
-*@description  Remove px from a number
+*@description  Remove px, %, em from a number
 * @return  number
 */
   function rpx(s) {
     s = s.toString();
-    return Math.round(Number(s.replace(/px/g, '')));
+    s = s.replace(/px/g, '');
+    s = s.replace(/%/g, '');
+    s = s.replace(/em/g, '');
+
+    s = Math.round(Number(s));
+
+    return s;
   }
 
 
@@ -1166,6 +1172,13 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function isNumber(value) {
     return /^-{0,1}\d+$/.test(value);
+  }
+
+
+  function isInt(value) {
+    const er = /^-?[0-9]+$/;
+
+    return er.test(value);
   }
 
   /**
@@ -2077,15 +2090,70 @@ function Vibe($self = document, {fn={}} = {} ) {
     // animate opacity
 
     let opacitydir = false;
-    if (options.prop) {
+    if (options.prop.opacity) {
       opacitydir = options.prop.opacity || 'pos';
-    }
 
-    if (opacitydir ==='pos') {
+      if (opacitydir ==='pos') {
+        move = function(progress) {
+          if (options.prop.to) {
+            if (progress >= options.prop.to) {
+              progress = options.prop.to;
+            }
+          }
+          $self.$css(`opacity:  ${progress};`);
+        };
+      }
+
+      if (opacitydir ==='neg') {
+        move = function(progress) {
+          let opos = $self.$cs('opacity');
+          opos -= progress;
+
+          if (options.prop.to) {
+            if (opos <= options.prop.to) {
+              opos = options.prop.to;
+            }
+          }
+          if (opos <= 0) {
+            opos =0;
+          }
+          $self.$css(`opacity:  ${opos};`);
+        };
+      }
+    } // end opacity
+
+
+    // All other props besides opacity
+    let curamt = 0;
+    let punit = '';
+    let aprop = 'width';
+    let sign = '';
+    let apropval = null;
+    if (options.prop && !options.prop.opacity) {
+      punit = options.prop.unit || 'px';
+      sign = options.prop.sign || '';
+      aprop = Object.entries(options.prop)[0][0] || 'width'; // the prop:
+      aprop = aprop.replace(/_/g, '-');
+      apropval = Object.entries(options.prop)[0][1] || null;// the prop: value
+      curamt = $self.$cs(`${aprop}`, true);
+      // console.log('curamt is'+curamt);
+      // console.log(aprop)
       move = function(progress) {
-        $self.$css(`opacity:  ${progress};`);
+        curamt = $self.$cs(`${aprop}`, true);
+        let amt;
+        // for props with real number/decimals values
+        if (!isInt(curamt)) {
+          amt = curamt + progress;
+          punit = '';
+        } else {
+          amt = Math.round(curamt + (progress * 2));
+        }
+        if (amt >= apropval || curamt >= apropval ) {
+          amt = apropval;
+        }
+        $self.$css(`${aprop}:  ${sign}${amt}${punit};`);
       };
-    }
+    }// end all other props
 
 
     const cpos = $self.$cs('position');
