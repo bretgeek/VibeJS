@@ -1175,9 +1175,14 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
 
+  /**
+* isInt
+* ISINT
+* @description check if parameter is a an integer
+* @return boolean
+*/
   function isInt(value) {
     const er = /^-?[0-9]+$/;
-
     return er.test(value);
   }
 
@@ -2328,6 +2333,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     isArray: isArray,
     isString: isString,
     isNumber: isNumber,
+    isInt: isInt,
     getAtPt: getAtPt,
     isTouching: isTouching,
     drag: drag,
