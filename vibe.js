@@ -1726,6 +1726,20 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+*queue
+*queue
+* @description A add a function to the queue (uses delay to do it)
+*@return this
+*/
+  function queue(fn, {time=1}={}) {
+    if (isFunction(fn)) {
+      $self.$delay( {time: time, fn: fn});
+    }
+    return this;
+  }
+
+
+  /**
 *runq
 *RUNQ
 * @description A poorman's queue - each chained function that calls run must set $self.isrun to false when done running
@@ -2095,7 +2109,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     // animate opacity
 
     let opacitydir = false;
-    if (options.prop.opacity) {
+    if (options.prop) {
       opacitydir = options.prop.opacity || 'pos';
 
       if (opacitydir ==='pos') {
@@ -2210,6 +2224,19 @@ function Vibe($self = document, {fn={}} = {} ) {
         return bounceEaseOut;
         break;
 
+      case 'quad':
+        return quad;
+        break;
+
+      case 'cubic':
+        return cubic;
+        break;
+
+
+      case 'circ':
+        return circ;
+        break;
+
 
       case 'bounceEaseInOut':
         return bounceEaseInOut;
@@ -2217,6 +2244,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       case 'bounce':
         return bounce;
+        break;
+
+      // TODO make variants of this with large values in bind
+      case 'elastic':
+        return elastic.bind(null, 1.5);
+        break;
+
+      case 'bow':
+        return bow.bind(null, 5.5);
         break;
 
 
@@ -2269,6 +2305,54 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   var bounceEaseInOut = makeEaseInOut(bounce);
+
+
+  /**
+* elastic
+* @description Easing utility function
+* @return {function}
+*/
+  function elastic(x, timeFraction) {
+    return Math.pow(2, 10 * (timeFraction - 1)) * Math.cos(20 * Math.PI * x / 3 * timeFraction);
+  }
+
+  /**
+* bow
+* @description Easing utility function
+* @return {function}
+*/
+  function bow(x, timeFraction) {
+    return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x);
+  }
+
+
+  /**
+* cubic
+* @description Easing utility function
+* @return {function}
+*/
+  function cubic(timeFraction) {
+    return Math.pow(timeFraction, 5);
+  }
+
+  /**
+* quad
+* @description Easing utility function
+* @return {function}
+*/
+  function quad(timeFraction) {
+    return Math.pow(timeFraction, 2);
+  }
+
+
+  /**
+* circ
+* @description Easing utility function
+* @return {function}
+*/
+  function circ(timeFraction) {
+    return 1 - Math.sin(Math.acos(timeFraction));
+  }
 
 
   /**
@@ -2343,6 +2427,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     show: show,
     hide: hide,
     delay: delay,
+    queue: queue,
     fadeIn: fadeIn,
     fadeOut: fadeOut,
     q: [],
