@@ -2051,6 +2051,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
   /**
 * animate
+* ANIMATE
 * @description Animate various properties and run optional function on complete
 * @return {this}
 */
@@ -2148,31 +2149,60 @@ function Vibe($self = document, {fn={}} = {} ) {
     let aprop = 'width';
     let sign = '';
     let apropval = null;
-    if (options.prop && !options.prop.opacity) {
-      punit = options.prop.unit || 'px';
-      sign = options.prop.sign || '';
-      aprop = Object.entries(options.prop)[0][0] || 'width'; // the prop:
-      aprop = aprop.replace(/_/g, '-');
-      apropval = Object.entries(options.prop)[0][1] || null;// the prop: value
-      curamt = $self.$cs(`${aprop}`, true);
-      // console.log('curamt is'+curamt);
-      // console.log(aprop)
-      move = function(progress) {
+    let transition = null;
+    if (options.prop && options.prop.transition) {
+      options.prop.opacity = 1; // set this to avoid blink when changing colors
+      // console.log(options.prop.transition)
+      amt = Number(Math.round(options.duration /1000));
+
+      if (amt < 1) {
+        amt =1;
+      }
+
+      const tempcolor = $self.$cs(`${options.prop.transition}`) || '#FFF';
+      // console.log(tempcolor);
+
+      const fromColor = options.prop.fromColor || tempcolor || '#FFFFFF';
+      // console.log(fromColor);
+      const toColor = options.prop.toColor || '#FFFFFF';
+
+      // change to function
+      function chto(e) {
+        e.$css(`${options.prop.transition}: ${toColor}; transition: ${options.prop.transition} ${amt}s;`);
+        // console.log(`fromColor ${fromColor} ${options.prop.transition}: ${toColor}; transition: ${options.prop.transition} ${amt}s;`)
+      }
+
+      $self.$css(`${options.prop.transition}: ${fromColor};  transition: ${options.prop.transition} ${amt}s;`).$delay({time: options.duration || 1000, fn: chto});
+      // console.log(amt)
+    } else {
+      if (options.prop && !options.prop.opacity) {
+        punit = options.prop.unit || 'px';
+        transition = options.prop.transition || 'color';
+        sign = options.prop.sign || '';
+        aprop = Object.entries(options.prop)[0][0] || 'width'; // the prop:
+        aprop = aprop.replace(/_/g, '-');
+        apropval = Object.entries(options.prop)[0][1] || null;// the prop: value
         curamt = $self.$cs(`${aprop}`, true);
-        let amt;
-        // for props with real number/decimals values
-        if (!isInt(curamt)) {
-          amt = curamt + progress;
-          punit = '';
-        } else {
-          amt = Math.round(curamt + (progress * 2));
-        }
-        if (amt >= apropval || curamt >= apropval ) {
-          amt = apropval;
-        }
-        $self.$css(`${aprop}:  ${sign}${amt}${punit};`);
-      };
-    }// end all other props
+        // console.log('curamt is'+curamt);
+        // console.log(aprop)
+        move = function(progress) {
+          curamt = $self.$cs(`${aprop}`, true);
+          let amt;
+          // for props with real number/decimals values
+          if (!isInt(curamt)) {
+            amt = curamt + progress;
+            punit = '';
+          } else {
+            amt = Math.round(curamt + (progress * 2));
+          }
+
+          if (amt >= apropval || curamt >= apropval ) {
+            amt = apropval;
+          }
+          $self.$css(`${aprop}:  ${sign}${amt}${punit};`);
+        };
+      }// end all other props
+    }
 
 
     const cpos = $self.$cs('position');
@@ -2257,7 +2287,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
       default:
-        return bounceEaseOut;
+        return function() {};
         break;
     }
   }
