@@ -1850,6 +1850,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     function dragStart(e) {
       // here we don't set dragee to absolute until dragging begins
       const pos = dragee.$cs('position');
+      // console.log(pos);
       if (pos !== 'absolute') {
         dragee.$css('position: absolute;');
       }
@@ -1859,12 +1860,15 @@ function Vibe($self = document, {fn={}} = {} ) {
       } else {
         initialX = e.clientX - xOffset;
         initialY = e.clientY - yOffset;
+        // console.log(xOffset);
       }
 
       if (e.target.matches(draghandle) || !draghandle) {
         e.target.style.cssText = 'user-select: none; cursor: pointer;';
         active = true;
       }
+      //   setTranslate(xOffset, yOffset, dragItem);
+      setTranslate(currentX, currentY, dragItem);
     }
 
     function dragEnd(e) {
@@ -1876,6 +1880,8 @@ function Vibe($self = document, {fn={}} = {} ) {
         active = false;
       }
       active = false;
+
+      setTranslate(currentX, currentY, dragItem);
     }
 
     function doDrag(e) {
@@ -1895,6 +1901,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         yOffset = currentY;
 
         setTranslate(currentX, currentY, dragItem);
+        // setTranslate(xOffset, yOffset, dragItem);
       }
     }
 
