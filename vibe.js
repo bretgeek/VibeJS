@@ -1696,6 +1696,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   function delay( {time=1000, fn=false}) {
     function f() {
       // console.log('running delay func')
+      // console.log(`running delay func ${fn.name}`)
       const d = new Date();
       const fut = d.getTime()+time;
       // console.log(`d is ${d.getTime()} fut is ${fut}`)
@@ -1731,7 +1732,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description A add a function to the queue (uses delay to do it)
 *@return this
 */
-  function queue(fn, {time=1}={}) {
+  function queue(fn, time=1) {
     if (isFunction(fn)) {
       $self.$delay( {time: time, fn: fn});
     }
@@ -1846,7 +1847,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     parentContainer.addEventListener('mouseup', dragEnd, false);
     containment.addEventListener('mouseleave', dragEnd, false);
     parentContainer.addEventListener('mousemove', doDrag, false);
-
+    let first = false;
     function dragStart(e) {
       // here we don't set dragee to absolute until dragging begins
       const pos = dragee.$cs('position');
@@ -1858,9 +1859,15 @@ function Vibe($self = document, {fn={}} = {} ) {
         initialX = e.touches[0].clientX - xOffset;
         initialY = e.touches[0].clientY - yOffset;
       } else {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
+        if (!first) { // for future use on first click/touch
+          first = true;
+          initialX = e.clientX - xOffset;
+          initialY = e.clientY - yOffset;
         // console.log(xOffset);
+        } else {
+          initialX = e.clientX - xOffset;
+          initialY = e.clientY - yOffset;
+        }
       }
 
       if (e.target.matches(draghandle) || !draghandle) {
