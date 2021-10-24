@@ -380,11 +380,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return collection or false if none
 */
 
-  function select(str, {
-    all = false,
-    vibe = true,
-    fn = false,
-  } = {}) {
+  function select(str, {all = false, vibe = true, fn = false} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
