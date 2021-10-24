@@ -1721,6 +1721,37 @@ function Vibe($self = document, {fn={}} = {} ) {
     return this;
   }
 
+  // Example to make a method delayable - normally you wouldn't want methods like css to be delayed but if you did then put that in delay({fn fn}) but methods with timing in them like like fadeOut and fadeIn need to be delayed so they finish before the other one starts if they are running in the same chain. So, this is how you would make a basic method that can be run on the queue. (you can also queue functions) - see fadeIn/Out for examples of methods that are time based.
+  /*
+  function delayonqcss(str, { add=true }={} ) {
+   if (isDocument) {
+      return this;
+    }
+    if (!str) {
+      return this;
+    }
+
+    // wrap the work in a function
+     function f (){
+       $self.$isrun = false;
+       $self.$runq();
+     // the actual work to be done
+      if(!add){
+        $self.style.cssText = str;
+       }else{
+       $self.style.cssText = $self.style.cssText + str;
+       }
+     }
+   // push the wrapped work onto the queue
+    $self.$q.push(f);
+    // gotta kickit off
+    if($self.$q.length){
+    $self.$runq();
+    }
+    return this;
+  }
+*/
+
 
   /**
 *queue
