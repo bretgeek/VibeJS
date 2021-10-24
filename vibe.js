@@ -2400,6 +2400,29 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* $$
+* @description shorthand all in one select to do any of html() css() or other functions to use instead of select with fn
+* @usage $vibe.$(obj) OR element.$$('.classname', {func: 'css', val:'color: green; '},);
+* @return {function}
+*/
+  function $({select=false, func='$css', val='display: block;'}={}) {
+    if (!select) {
+      return;
+    } else {
+      function fnc(e) {
+        e['$'+func](val);
+      }
+      if (isDocument) {// if called with vibe
+        $vibe.select(`${select}`, {all: true, fn: fnc});
+      } else {
+        $self.$select(`${select}`, {all: true, fn: fnc});
+      }
+    }
+    return this;
+  }
+
+
+  /**
 * obj
 * RETURN OBJ
 * @return {object}
@@ -2481,6 +2504,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     pipe: pipe,
     stream: [],
     animate: animate,
+    $: $,
   };
 
   // This allows you to do Appref.$text()
