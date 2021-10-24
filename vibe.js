@@ -2122,28 +2122,38 @@ function Vibe($self = document, {fn={}} = {} ) {
       amt = options.move.amt || 0;
       unit = options.move.unit || 'px';
 
+
       if (dir ==='left') {
+        const curleft = Math.round($self.$rect('left'));
+        $self.$css(`left:  ${curleft}${unit};`);
         move = function(progress) {
-          $self.$css(`left:  -${Math.round(progress * amt)}px`);
+          $self.$css(`left:  ${Math.round(curleft-progress * amt)}${unit};`);
         };
       }
 
       if (dir ==='right') {
-        move = function(progress) {
-          $self.$css(`left:  ${Math.round(progress * amt)}${unit}`);
+        const curleft = Math.round($self.$rect('left'));
+        // console.log('curleft is '+ curleft)
+        $self.$css(`left:  ${curleft}${unit};`);
+        move = function( progress) {
+          $self.$css(`left:  ${Math.round(curleft+progress * amt)}${unit};`);
         };
       }
 
       if (dir ==='down') {
+        const curtop = Math.round($self.$rect('top'));
+        $self.$css(`top:  ${curtop}${unit};`);
         move = function(progress) {
-          $self.$css(`top:  ${Math.round(progress * amt)}${unit}`);
+          $self.$css(`top:  ${Math.round(curtop+progress * amt)}${unit}`);
         };
       }
 
-
       if (dir ==='up') {
+        const curtop = Math.round($self.$rect('top'));
+        // console.log('curtop is '+curtop)
+        $self.$css(`top:  ${curtop}${unit};`);
         move = function(progress) {
-          $self.$css(`bottom:  ${Math.round(progress * amt)}${unit}`);
+          $self.$css(`top:  ${Math.round(curtop-progress * amt)}${unit}`);
         };
       }
     } // end if options.move
