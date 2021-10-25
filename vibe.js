@@ -1581,36 +1581,26 @@ function Vibe($self = document, {fn={}} = {} ) {
 *@return {object}
 */
   function fadeIn({display='block', speed=300}={}) {
-    function f() {
-      const cdisp = $self.$cs('display');
-      // start out hidden;
-      $self.$css(`display: ${cdisp}; visibility: visible; opacity: 0.0;`, {add: true});
+    const cdisp = $self.$cs('display');
+    // start out hidden;
+    $self.$css(`display: ${cdisp}; visibility: visible; opacity: 0.0;`, {add: true});
 
-      $self.$css(`display: ${display}; visibility: visible;`, {add: true});
+    $self.$css(`display: ${display}; visibility: visible;`, {add: true});
 
-      let opa = 0;
-      // let intv = setInterval(function(){
-      const intv = requestInterval(function() {
-        opa++;
-        if (opa <= 9) {
-          $self.$css(`opacity: 0.${opa} `, {add: true});
-        } else {
-          opa=1;
-          $self.$css(`opacity: ${opa} `, {add: true});
-          $self.$isrun = false;
-          $self.$runq();
-          // clearInterval(intv);
-          intv.clear();
-        }
-      }, speed);
-    }
+    let opa = 0;
+    // let intv = setInterval(function(){
+    const intv = requestInterval(function() {
+      opa++;
+      if (opa <= 9) {
+        $self.$css(`opacity: 0.${opa} `, {add: true});
+      } else {
+        opa=1;
+        $self.$css(`opacity: ${opa} `, {add: true});
+        // clearInterval(intv);
+        intv.clear();
+      }
+    }, speed);
 
-
-    $self.$q.push(f);
-    // gotta kickit off
-    if ($self.$q.length) {
-      $self.$runq();
-    }
 
     return this;
   } // end fadeIn
@@ -1623,38 +1613,29 @@ function Vibe($self = document, {fn={}} = {} ) {
 *@return {object}
 */
   function fadeOut({display='block', speed=300}={}) {
-    function f() {
-      const cdisp = $self.$cs('display');
-      // start out visible;
-      $self.$css(`display: ${cdisp}; visibility: visible; opacity: 1;`, {add: true});
+    const cdisp = $self.$cs('display');
+    // start out visible;
+    $self.$css(`display: ${cdisp}; visibility: visible; opacity: 1;`, {add: true});
 
-      $self.$css(`display: ${display}; visibility: visible;`, {add: true});
+    $self.$css(`display: ${display}; visibility: visible;`, {add: true});
 
-      let opa = 1;
-      // let intv = setInterval(function(){
-      const intv = requestInterval(function() {
-        if (opa > 0.1) {
-          opa -= 0.1;
-          opa = opa.toFixed(2);
-          // console.log('opa is '+opa);
-          $self.$css(`opacity: ${opa} `, {add: true});
-        } else {
-          opa=0;
-          $self.$css(`opacity: ${opa} `, {add: true});
-          $self.$isrun = false;
-          $self.$runq();
-          // clearInterval(intv);
-          intv.clear();
-        }
-      }, speed);
-    }
-
-    $self.$q.push(f);
-    // gotta kickit off
-    if ($self.$q.length) {
-      $self.$runq();
-    }
-
+    let opa = 1;
+    // let intv = setInterval(function(){
+    const intv = requestInterval(function() {
+      if (opa > 0.1) {
+        opa -= 0.1;
+        opa = opa.toFixed(2);
+        // console.log('opa is '+opa);
+        $self.$css(`opacity: ${opa} `, {add: true});
+      } else {
+        opa=0;
+        $self.$css(`opacity: ${opa} `, {add: true});
+        $self.$isrun = false;
+        $self.$runq();
+        // clearInterval(intv);
+        intv.clear();
+      }
+    }, speed);
     return this;
   } // end fadeOut
 
@@ -1691,16 +1672,16 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function delay( {time=1000, fn=false}) {
     function f() {
-      // console.log('running delay func')
+      //     console.log('running delay '+time)
       // console.log(`running delay func ${fn.name}`)
       const d = new Date();
       const fut = d.getTime()+time;
-      // console.log(`d is ${d.getTime()} fut is ${fut}`)
+      //     console.log(`d is ${d.getTime()} fut is ${fut}`)
       // let intv = setInterval(function(){
       const intv = requestInterval(function() {
         const newd = new Date();
         if (newd.getTime() >= fut) {
-          // console.log('I was delayed')
+          console.log('I was delayed');
           if (isFunction(fn)) {
             fn($self);
           }
@@ -1720,37 +1701,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     return this;
   }
-
-  // Example to make a method delayable - normally you wouldn't want methods like css to be delayed but if you did then put that in delay({fn fn}) but methods with timing in them like like fadeOut and fadeIn need to be delayed so they finish before the other one starts if they are running in the same chain. So, this is how you would make a basic method that can be run on the queue. (you can also queue functions) - see fadeIn/Out for examples of methods that are time based.
-  /*
-  function delayonqcss(str, { add=true }={} ) {
-   if (isDocument) {
-      return this;
-    }
-    if (!str) {
-      return this;
-    }
-
-    // wrap the work in a function
-     function f (){
-       $self.$isrun = false;
-       $self.$runq();
-     // the actual work to be done
-      if(!add){
-        $self.style.cssText = str;
-       }else{
-       $self.style.cssText = $self.style.cssText + str;
-       }
-     }
-   // push the wrapped work onto the queue
-    $self.$q.push(f);
-    // gotta kickit off
-    if($self.$q.length){
-    $self.$runq();
-    }
-    return this;
-  }
-*/
 
 
   /**
@@ -2122,7 +2072,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       amt = options.move.amt || 0;
       unit = options.move.unit || 'px';
 
-
+      // you must pre-position your element to absolute
       if (dir ==='left') {
         const curleft = Math.round($self.$rect('left'));
         $self.$css(`left:  ${curleft}${unit};`);
@@ -2284,6 +2234,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (isFunction(done)) {
           done();
         }
+        $self.isrun = false;
       }
     });
     return this;
