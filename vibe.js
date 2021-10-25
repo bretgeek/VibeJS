@@ -1681,7 +1681,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       const intv = requestInterval(function() {
         const newd = new Date();
         if (newd.getTime() >= fut) {
-          console.log('I was delayed');
+          //        console.log('I was delayed')
           if (isFunction(fn)) {
             fn($self);
           }
