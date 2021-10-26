@@ -1571,6 +1571,9 @@ function Vibe($self = document, {fn={}} = {} ) {
       clear: function() {
         stop=1;
       },
+      start: function() {
+        dateNow();
+      },
     };
   };
 
