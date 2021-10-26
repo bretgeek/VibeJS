@@ -2292,7 +2292,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
       default:
-        return function() {};
+        return quad;
         break;
     }
   }
