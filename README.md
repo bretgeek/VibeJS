@@ -15,7 +15,7 @@ If you are looking for an alternative to bigger libraries like VueJS and React w
 Visit **https://vibejs.com** for updates and info.
 
 ## Features
-* Small - currently under ~15KB minified.
+* Small - currently under ~19KB minified.
 * Create self contained components for composing larger components and apps.
 * Optionally access components externally.
 * Rendered components receive built-in methods (the Vibe).
