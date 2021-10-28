@@ -2235,7 +2235,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         requestAnimationFrame(animate);
       } else {
         if (isFunction(done)) {
-          done();
+          done($self);
         }
         $self.isrun = false;
       }
