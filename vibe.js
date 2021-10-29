@@ -451,6 +451,24 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return computed stryles of an element
 */
   function cs(prop, trim = false) {
+    // these are not computed values but you may need them and forget you can just do $self.offset*
+    if (prop === 'offsetLeft') {
+      return $self.offsetLeft;
+    }
+
+    if (prop === 'offsetTop') {
+      return $self.offsetTop;
+    }
+
+    if (prop === 'offsetHeight') {
+      return $self.offsetHeight;
+    }
+
+    if (prop === 'offsetWidth') {
+      return $self.offsetHeight;
+    }
+
+
     let cs = getComputedStyle($self).getPropertyValue(prop) || null;
     if (trim) {
       try {
@@ -1723,7 +1741,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 *runq
 *RUNQ
-* @description A poorman's queue - each chained function that calls run must set $self.isrun to false when done running
+* @description A poorman's queue - each chained function that calls runq must set $self.isrun to false when done running
 *@return null
 */
   function runq() {
@@ -2077,7 +2095,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       // you must pre-position your element to absolute
       if (dir ==='left') {
-        const curleft = Math.round($self.$rect('left'));
+        const curleft = Math.round($self.offsetLeft);
+        // let curleft = Math.round($self.$rect('left'));
         $self.$css(`left:  ${curleft}${unit};`);
         move = function(progress) {
           $self.$css(`left:  ${Math.round(curleft-progress * amt)}${unit};`);
@@ -2085,7 +2104,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
 
       if (dir ==='right') {
-        const curleft = Math.round($self.$rect('left'));
+        const curleft = Math.round($self.offsetLeft);
+        // let curleft = Math.round($self.$rect('left'));
         // console.log('curleft is '+ curleft)
         $self.$css(`left:  ${curleft}${unit};`);
         move = function( progress) {
