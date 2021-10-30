@@ -796,6 +796,34 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
+  /**
+* left
+* LEFT
+* @description return left or left added to num for a new left value. set neg to true to sign the result with minus sign
+* @return string as number
+*/
+  function left(num=false, neg=false) {
+    if (isDocument) {
+      return this;
+    }
+    let left;
+    let leftneg;
+    if (neg) {
+      leftneg = `-${$self.$cs('left', true) + num}`;
+    } else {
+      left = `${$self.$cs('left', true) + num}`;
+    }
+
+    if (left) {
+      return left;
+    } else {
+      return leftneg;
+    }
+
+    if (!left || !leftneg) {
+      return $self.$cs('left', true);
+    }
+  }
 
   /**
 * CSS
@@ -2452,6 +2480,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     get: get,
     post: post,
     css: css,
+    left: left,
     isTouch: isTouch,
     rpx: rpx,
     addClass: addClass,
