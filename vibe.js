@@ -851,7 +851,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       return node;
     }
     if (!isElement(to)) {
-      to = document.querySelector(to);
+      to = document.querySelector('body');
     }
 
 
