@@ -2109,12 +2109,10 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
 
       if (dir ==='right') {
-        let curleft = Math.round($self.$rect('left'));
-        if (!useLeft) {
-          curleft = Math.round($self.offsetLeft);
-        } ;
+        // let curleft = Math.round($self.$rect('left'));
+        // if(!useLeft){ curleft = Math.round($self.offsetLeft)} ;
         // console.log('curleft is '+ curleft)
-        $self.$css(`left:  ${curleft}${unit};`);
+        // $self.$css(`left:  ${curleft}${unit};`);
         move = function( progress) {
           $self.$css(`left:  ${Math.round(progress * amt)}${unit};`);
         };
