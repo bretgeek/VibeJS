@@ -2077,7 +2077,10 @@ function Vibe($self = document, {fn={}} = {} ) {
       done = options.done;
     }
 
-
+    let useLeft = true;
+    if (options.offsetLeft) {
+      useLeft = false;
+    }
     // directions
     let dir = false;
     let amt = false;
@@ -2095,8 +2098,10 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       // you must pre-position your element to absolute
       if (dir ==='left') {
-        const curleft = Math.round($self.offsetLeft);
-        // let curleft = Math.round($self.$rect('left'));
+        let curleft = Math.round($self.$rect('left'));
+        if (!useLeft) {
+          curleft = Math.round($self.offsetLeft);
+        } ;
         $self.$css(`left:  ${curleft}${unit};`);
         move = function(progress) {
           $self.$css(`left:  ${Math.round(curleft-progress * amt)}${unit};`);
@@ -2104,12 +2109,14 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
 
       if (dir ==='right') {
-        const curleft = Math.round($self.offsetLeft);
-        // let curleft = Math.round($self.$rect('left'));
+        let curleft = Math.round($self.$rect('left'));
+        if (!useLeft) {
+          curleft = Math.round($self.offsetLeft);
+        } ;
         // console.log('curleft is '+ curleft)
         $self.$css(`left:  ${curleft}${unit};`);
         move = function( progress) {
-          $self.$css(`left:  ${Math.round(curleft+progress * amt)}${unit};`);
+          $self.$css(`left:  ${Math.round(progress * amt)}${unit};`);
         };
       }
 
