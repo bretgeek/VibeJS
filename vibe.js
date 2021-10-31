@@ -480,6 +480,30 @@ function Vibe($self = document, {fn={}} = {} ) {
     return cs;
   }
 
+  /**
+* ctx
+* CTX
+* @description  return ctx if $self is canvas elemnt
+* @return canvas contxt
+*/
+  function ctx(str='2d', obj=false) {
+  // obj can be context attributes see MDN
+
+    if (isDocument) {
+      return this;
+    }
+    // console.log('n name = '+$self.nodeName);
+    if ($self.tagName === 'CANVAS' || $self.nodeName === 'CANVAS' || $self instanceof HTMLCanvasElement ) {
+      if (obj) {
+        return $self.getContext(str, obj);
+      } else {
+        return $self.getContext(str);
+      }
+    } else {
+      throw new Error( '$self must be an instance of canvas.' );
+    }
+  }
+
 
   /**
 * rect
@@ -2511,6 +2535,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     rect: rect,
     mountedTo: false,
     cs: cs,
+    ctx: ctx,
     on: on,
     observe: observe,
     observers: {},
