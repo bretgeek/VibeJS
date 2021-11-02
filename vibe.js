@@ -558,6 +558,20 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
   /**
+ * internal function to take string 'param' as element propert like el.textContent = and return or set it
+ */
+  function dofuncs(stk=false, param, str) {
+    for (const s of stk) {
+      if (!str) {
+        return s[`${param}`];
+      } else {
+        s[`${param}`] = str;
+      }
+    }
+  }
+
+
+  /**
 * text
 * TEXT
 * @description Get or set text
@@ -565,24 +579,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function text(str = false) {
     // for vibe.each
-    function dotext(stk ) {
-      for (const s of stk) {
-        if (!str) {
-          return s.textContent;
-        } else {
-          s.textContent = str;
-        }
-      }
-    }
-
 
     if (isDocument) {
-      dotext($self.stk);
+      dofuncs($self.stk, 'textContent', str);
       return this;
     }
 
     if ($self.$stk.length) {
-      dotext($self.$stk);
+      // dotext($self.$stk)
+      dofuncs($self.$stk, 'textContent', str);
       return this;
     } else {
       if (!str) {
@@ -603,25 +608,13 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function html(str = false) {
     // for vibe.each
-    function dohtml(stk ) {
-      for (const s of stk) {
-        if (!str) {
-          return s.innerHTML;
-        } else {
-          s.innerHTML = str;
-        }
-      }
-    }
-
-
     if (isDocument) {
-      dohtml($self.stk);
+      dofuncs($self.stk, 'innerHTML', str);
       return this;
     }
 
-
     if ($self.$stk.length) {
-      dohtml($self.$stk);
+      dofuncs($self.$stk, 'innerHTML', str);
       return this;
     } else {
       if (!str) {
