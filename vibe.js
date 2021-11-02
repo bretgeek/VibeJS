@@ -564,13 +564,32 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return this to maintain chain
 */
   function text(str = false) {
+    // for vibe.each
+    function dotext(stk ) {
+      for (const s of stk) {
+        if (!str) {
+          return s.textContent;
+        } else {
+          s.textContent = str;
+        }
+      }
+    }
+
+
     if (isDocument) {
+      dotext($self.stk);
       return this;
     }
-    if (!str) {
-      return $self.textContent;
+
+    if ($self.$stk.length) {
+      dotext($self.$stk);
+      return this;
     } else {
-      $self.textContent = str;
+      if (!str) {
+        return $self.textContent;
+      } else {
+        $self.textContent = str;
+      }
       return this;
     }
   }
@@ -583,13 +602,33 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return this to maintain chain
 */
   function html(str = false) {
+    // for vibe.each
+    function dohtml(stk ) {
+      for (const s of stk) {
+        if (!str) {
+          return s.innerHTML;
+        } else {
+          s.innerHTML = str;
+        }
+      }
+    }
+
+
     if (isDocument) {
+      dohtml($self.stk);
       return this;
     }
-    if (!str) {
-      return $self.innerHTML;
+
+
+    if ($self.$stk.length) {
+      dohtml($self.$stk);
+      return this;
     } else {
-      $self.innerHTML = str;
+      if (!str) {
+        return $self.innerHTML;
+      } else {
+        $self.innerHTML = str;
+      }
       return this;
     }
   }
@@ -855,17 +894,35 @@ function Vibe($self = document, {fn={}} = {} ) {
 *@return this and is chainable
 */
   function css(str, {add=true}={} ) {
+    function docss(stk ) {
+      for (const s of stk) {
+        if (!add) {
+          s.style.cssText = str;
+        } else {
+          s.style.cssText = s.style.cssText + str;
+        }
+      }
+    }
+    // for vibe.each
     if (isDocument) {
+      docss($self.stk);
       return this;
     }
+
     if (!str) {
       return this;
     }
-    if (!add) {
-      $self.style.cssText = str;
+
+    if ($self.$stk.length) {
+      docss($self.$stk);
     } else {
-      $self.style.cssText = $self.style.cssText + str;
+      if (!add) {
+        $self.style.cssText = str;
+      } else {
+        $self.style.cssText = $self.style.cssText + str;
+      }
     }
+
     return this;
   }
 
@@ -2479,24 +2536,35 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
-* $$
-* @description shorthand all in one select to do any of html() css() or other functions to use instead of select with fn
-* @usage $vibe.$('.classnam', obj) OR element.$$('.classname', {func: 'css', val:'color: green; '},);
+* each
+* EACH
+* @description For use as vibe.each to select variable amount of selectors and continue the chain of  any of html() css() or other functions to use instead of select with fn
+* @usage $vibe.each('h1').css('color: red;').html("hello").text('doit');;
 * @return {function}
 */
-  function $(select=false, {func='$css', val='display: block;'}={}) {
+  function each(select=false, {vibe=true, fn=false} = {}) {
+    let stk;
     if (!select) {
       return;
     } else {
-      function fnc(e) {
-        e['$'+func](val);
-      }
       if (isDocument) {// if called with vibe
-        $vibe.select(`${select}`, {all: true, fn: fnc});
+        stk = $vibe.select(`${select}`, {all: true});
+        $self.stk = stk;
       } else {
-        $self.$select(`${select}`, {all: true, fn: fnc});
+        stk = $self.$select(`${select}`, {all: true});
+        $self.$stk = stk;
       }
     }
+
+    if (isFunction(fn) && stk.length) {
+      for (const s of stk) {
+        if (vibe) {
+          s.$ = Vibe().render(s);
+        }
+        fn(s);
+      }
+    }
+
     return this;
   }
 
@@ -2585,7 +2653,8 @@ function Vibe($self = document, {fn={}} = {} ) {
     pipe: pipe,
     stream: [],
     animate: animate,
-    $: $,
+    each: each,
+    stk: [],
   };
 
   // This allows you to do Appref.$text()
