@@ -2138,9 +2138,17 @@ function Vibe($self = document, {fn={}} = {} ) {
     let amt = false;
     let unit = false;
     let move;
+    let step;
 
     if (options.move && isFunction(options.move)) {
       move = options.move;
+    } else {
+      move = function() {}; // dummy function for now
+    }
+
+
+    if (options.step && isFunction(options.step)) {
+      step = options.step;
     }
 
     if (options.move && !isFunction(options.move)) {
@@ -2302,6 +2310,9 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       const progress = easing(timeFraction);
 
+      if (options.step && isFunction(options.step)) {
+        step($self, progress);
+      }
       if (options.move && isFunction(options.move)) {
         move($self, progress);
       } else {
@@ -2470,10 +2481,10 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * $$
 * @description shorthand all in one select to do any of html() css() or other functions to use instead of select with fn
-* @usage $vibe.$(obj) OR element.$$('.classname', {func: 'css', val:'color: green; '},);
+* @usage $vibe.$('.classnam', obj) OR element.$$('.classname', {func: 'css', val:'color: green; '},);
 * @return {function}
 */
-  function $({select=false, func='$css', val='display: block;'}={}) {
+  function $(select=false, {func='$css', val='display: block;'}={}) {
     if (!select) {
       return;
     } else {
