@@ -2521,7 +2521,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * each
 * EACH
 * @description For $vibe.each OR  el.$each - selects variable amount of selectors from within an element (from document if $vibe.each) optionally vibe them (on by default) and run fn against them. Chained methods do affect the selectors passed from the each only the element from which it was called. To affect the selectors passed to $each you must use fn. $vibe.each  selectors will be affected by the chain itself. Use $vibe.each when you want to traverse from the top level document. use el.$each to select elements from within el and run a function against the vibed elements it finds.
-* @usage $vibe.each('h1').css('color: red;').html("hello").text('doit');;
+* @usage EAXAMPLE: $vibe.each('h1').css('color: red;').html("hello").text('doit');// All chains work on h1.
+* EAXAMPLE: h2.$each('span', {fn:  function(e){ e.$appendTo('h1')}} ).$text('doit') ;// span is appended to h1 from fn. $text here affects the h2 not the span selector. To affect the span use e.$ in fn.
 * @return {function}
 */
   function each(select=false, {vibe=true, fn=false} = {}) {
