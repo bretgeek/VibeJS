@@ -585,18 +585,12 @@ function Vibe($self = document, {fn={}} = {} ) {
       return this;
     }
 
-    if ($self.$stk.length) {
-      // dotext($self.$stk)
-      dofuncs($self.$stk, 'textContent', str);
-      return this;
+    if (!str) {
+      return $self.textContent;
     } else {
-      if (!str) {
-        return $self.textContent;
-      } else {
-        $self.textContent = str;
-      }
-      return this;
+      $self.textContent = str;
     }
+    return this;
   }
 
 
@@ -613,17 +607,12 @@ function Vibe($self = document, {fn={}} = {} ) {
       return this;
     }
 
-    if ($self.$stk.length) {
-      dofuncs($self.$stk, 'innerHTML', str);
-      return this;
+    if (!str) {
+      return $self.innerHTML;
     } else {
-      if (!str) {
-        return $self.innerHTML;
-      } else {
-        $self.innerHTML = str;
-      }
-      return this;
+      $self.innerHTML = str;
     }
+    return this;
   }
 
 
@@ -2531,7 +2520,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * each
 * EACH
-* @description For $vibe.each A quick a dirty way to affect the html() and css() of selected elements OR  to select variable amount of selectors from within an element and continue the chain of any of html() css() or other functions to use instead of select with fn. In the case of html() and css the action are applied to the stack from which element the each method was calledd. To apply other methods on the stack use fn function parameter that passes found objects in and then vibes them.
+* @description For $vibe.each OR  el.$each - selects variable amount of selectors from within an element (from document if $vibe.each) optionally vibe them (on by default) and run fn against them. Chained methods do affect the selectors passed from the each only the element from which it was called. To affect the selectors passed to $each you must use fn. $vibe.each  selectors will be affected by the chain itself. Use $vibe.each when you want to traverse from the top level document. use el.$each to select elements from within el and run a function against the vibed elements it finds.
 * @usage $vibe.each('h1').css('color: red;').html("hello").text('doit');;
 * @return {function}
 */
