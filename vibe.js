@@ -2531,7 +2531,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 * each
 * EACH
-* @description For use as vibe.each to select variable amount of selectors and continue the chain of any of html() css() or other functions to use instead of select with fn . In the case of html() and css the action are applied to the stack from which element each was calledd. To apply other methods use fn function parameterd. To apply other methods use fn function parameter
+* @description For $vibe.each A quick a dirty way to affect the html() and css() of selected elements OR  to select variable amount of selectors from within an element and continue the chain of any of html() css() or other functions to use instead of select with fn. In the case of html() and css the action are applied to the stack from which element the each method was calledd. To apply other methods on the stack use fn function parameter that passes found objects in and then vibes them.
 * @usage $vibe.each('h1').css('color: red;').html("hello").text('doit');;
 * @return {function}
 */
