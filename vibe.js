@@ -2390,13 +2390,40 @@ function Vibe($self = document, {fn={}} = {} ) {
         return quad;
         break;
 
+      case 'sinus':
+        return sinus;
+        break;
+
+      case 'elasticInOut':
+        return elasticInOut;
+        break;
+
+      case 'elasticIn':
+        return elasticIn;
+        break;
+
+
+      case 'elasticOut':
+        return elasticOut;
+        break;
+
+
       case 'cubic':
         return cubic;
         break;
 
 
-      case 'circ':
-        return circ;
+      case 'circularIn':
+        return circularIn;
+        break;
+
+      case 'circularOut':
+        return circularOut;
+        break;
+
+
+      case 'circularInOut':
+        return circularInOut;
         break;
 
 
@@ -2406,11 +2433,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       case 'bounce':
         return bounce;
-        break;
-
-      // TODO make variants of this with large values in bind
-      case 'elastic':
-        return elastic.bind(null, 1.5);
         break;
 
       case 'bow':
@@ -2470,15 +2492,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
-* elastic
-* @description Easing utility function
-* @return {function}
-*/
-  function elastic(x, timeFraction) {
-    return Math.pow(2, 10 * (timeFraction - 1)) * Math.cos(20 * Math.PI * x / 3 * timeFraction);
-  }
-
-  /**
 * bow
 * @description Easing utility function
 * @return {function}
@@ -2506,14 +2519,97 @@ function Vibe($self = document, {fn={}} = {} ) {
     return Math.pow(timeFraction, 2);
   }
 
+  function sinus(timeFraction) {
+    // sinusoidal
+    return 1 - Math.sin(((1.0 - timeFraction) * Math.PI) / 2);
+  }
 
   /**
-* circ
+* elasticOut
 * @description Easing utility function
 * @return {function}
 */
-  function circ(timeFraction) {
-    return 1 - Math.sin(Math.acos(timeFraction));
+  function elasticOut(amount) {
+    if (amount === 0) {
+      return 0;
+    }
+
+    if (amount === 1) {
+      return 1;
+    }
+    return Math.pow(2, -10 * amount) * Math.sin((amount - 0.1) * 5 * Math.PI) + 1;
+  }
+
+
+  /**
+* elasticIn
+* @description Easing utility function
+* @return {function}
+*/
+  function elasticIn(amount) {
+    if (amount === 0) {
+      return 0;
+    }
+    if (amount === 1) {
+      return 1;
+    }
+
+    return -Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+  }
+
+
+  /**
+* elasticInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function elasticInOut(amount) {
+    if (amount === 0) {
+      return 0;
+    }
+
+    if (amount === 1) {
+      return 1;
+    }
+
+    amount *= 2;
+    if (amount < 1) {
+      return -0.5 * Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+    }
+
+    return 0.5 * Math.pow(2, -10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI) + 1;
+  }
+
+
+  /**
+* circularIn
+* @description Easing utility function
+* @return {function}
+*/
+  function circularIn(amount) {
+    return 1 - Math.sqrt(1 - amount * amount);
+  }
+
+
+  /**
+* circularOut
+* @description Easing utility function
+* @return {function}
+*/
+  function circularOut(amount) {
+    return Math.sqrt(1 - --amount * amount);
+  }
+
+  /**
+* circularInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function circularInOut(amount) {
+    if ((amount *= 2) < 1) {
+      return -0.5 * (Math.sqrt(1 - amount * amount) - 1);
+    }
+    return 0.5 * (Math.sqrt(1 - (amount -= 2) * amount) + 1);
   }
 
 
