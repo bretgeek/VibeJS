@@ -2382,17 +2382,66 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function getEase(str) {
     switch (str) {
-      case 'bounceEaseOut':
-        return bounceEaseOut;
+      case 'bounceOut':
+        return bounceOut;
         break;
 
-      case 'quad':
-        return quad;
+
+      case 'bounceInOut':
+        return bounceInOut;
         break;
 
-      case 'sinus':
-        return sinus;
+      case 'bounceIn':
+        return bounce;
         break;
+
+
+      case 'linear':
+        return function(amt) {
+          return amt;
+        };
+        break;
+
+
+      case 'quadIn':
+        return quadIn;
+        break;
+
+      case 'quadOut':
+        return quadOut;
+        break;
+
+      case 'quadInOut':
+        return quadInOut;
+        break;
+
+
+      case 'quinticIn':
+        return quinticIn;
+        break;
+
+      case 'quinticOut':
+        return quinticOut;
+        break;
+
+
+      case 'quinticInOut':
+        return quinticInOut;
+        break;
+
+
+      case 'exponentialIn':
+        return exponentialIn;
+        break;
+
+      case 'exponentialOut':
+        return exponentialOut;
+        break;
+
+      case 'exponentialInOut':
+        return exponentialInOut;
+        break;
+
 
       case 'elasticInOut':
         return elasticInOut;
@@ -2427,12 +2476,16 @@ function Vibe($self = document, {fn={}} = {} ) {
         break;
 
 
-      case 'bounceEaseInOut':
-        return bounceEaseInOut;
+      case 'backIn':
+        return backIn;
         break;
 
-      case 'bounce':
-        return bounce;
+      case 'backOut':
+        return backOut;
+        break;
+
+      case 'backInOut':
+        return backInOut;
         break;
 
       case 'bow':
@@ -2441,7 +2494,9 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
       default:
-        return quad;
+        return function(amt) {
+          return amt;
+        };
         break;
     }
   }
@@ -2453,8 +2508,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return {function}
 */
   function makeEaseOut(timing) {
-    return function(timeFraction) {
-      return 1 - timing(1 - timeFraction);
+    return function(amt) {
+      return 1 - timing(1 - amt);
     };
   }
 
@@ -2463,15 +2518,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function bounce(timeFraction) {
+  function bounce(amt) {
     for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
-      if (timeFraction >= (7 - 4 * a) / 11) {
-        return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+      if (amt >= (7 - 4 * a) / 11) {
+        return -Math.pow((11 - 6 * a - 11 * amt) / 4, 2) + Math.pow(b, 2);
       }
     }
   }
 
-  var bounceEaseOut = makeEaseOut(bounce);
+  var bounceOut = makeEaseOut(bounce);
 
   /**
 * makeEaseInOut
@@ -2479,16 +2534,16 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return {function}
 */
   function makeEaseInOut(timing) {
-    return function(timeFraction) {
-      if (timeFraction < .5) {
-        return timing(2 * timeFraction) / 2;
+    return function(amt) {
+      if (amt < .5) {
+        return timing(2 * amt) / 2;
       } else {
-        return (2 - timing(2 * (1 - timeFraction))) / 2;
+        return (2 - timing(2 * (1 - amt))) / 2;
       }
     };
   }
 
-  var bounceEaseInOut = makeEaseInOut(bounce);
+  var bounceInOut = makeEaseInOut(bounce);
 
 
   /**
@@ -2496,8 +2551,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function bow(x, timeFraction) {
-    return Math.pow(timeFraction, 2) * ((x + 1) * timeFraction - x);
+  function bow(x, amt) {
+    return Math.pow(amt, 2) * ((x + 1) * amt - x);
   }
 
 
@@ -2506,38 +2561,94 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function cubic(timeFraction) {
-    return Math.pow(timeFraction, 5);
+  function cubic(amt) {
+    return Math.pow(amt, 5);
   }
 
   /**
-* quad
+* quadIn
 * @description Easing utility function
 * @return {function}
 */
-  function quad(timeFraction) {
-    return Math.pow(timeFraction, 2);
+  function quadIn(amt) {
+    return amt * amt;
   }
 
-  function sinus(timeFraction) {
-    // sinusoidal
-    return 1 - Math.sin(((1.0 - timeFraction) * Math.PI) / 2);
+  /**
+* quadOut
+* @description Easing utility function
+* @return {function}
+*/
+  function quadOut(amt) {
+    return amt * (2 - amt);
   }
+
+
+  /**
+* quadInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function quadInOut(amt) {
+    if ((amt *= 2) < 1) {
+      return 0.5 * amt * amt;
+    }
+    return -0.5 * (--amt * (amt - 2) - 1);
+  }
+
+
+  /**
+* exponentialIn
+* @description Easing utility function
+* @return {function}
+*/
+  function exponentialIn(amt) {
+    return amt === 0 ? 0 : Math.pow(1024, amt - 1);
+  }
+
+  /**
+* exponentialOut
+* @description Easing utility function
+* @return {function}
+*/
+  function exponentialOut(amt) {
+    return amt === 1 ? 1 : 1 - Math.pow(2, -10 * amt);
+  }
+
+  /**
+* exponentialInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function exponentialInOut(amt) {
+    if (amt === 0) {
+      return 0;
+    }
+    if (amt === 1) {
+      return 1;
+    }
+
+    if ((amt *= 2) < 1) {
+      return 0.5 * Math.pow(1024, amt - 1);
+    }
+    return 0.5 * (-Math.pow(2, -10 * (amt - 1)) + 2);
+  }
+
 
   /**
 * elasticOut
 * @description Easing utility function
 * @return {function}
 */
-  function elasticOut(amount) {
-    if (amount === 0) {
+  function elasticOut(amt) {
+    if (amt === 0) {
       return 0;
     }
 
-    if (amount === 1) {
+    if (amt === 1) {
       return 1;
     }
-    return Math.pow(2, -10 * amount) * Math.sin((amount - 0.1) * 5 * Math.PI) + 1;
+    return Math.pow(2, -10 * amt) * Math.sin((amt - 0.1) * 5 * Math.PI) + 1;
   }
 
 
@@ -2546,15 +2657,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function elasticIn(amount) {
-    if (amount === 0) {
+  function elasticIn(amt) {
+    if (amt === 0) {
       return 0;
     }
-    if (amount === 1) {
+    if (amt === 1) {
       return 1;
     }
 
-    return -Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+    return -Math.pow(2, 10 * (amt - 1)) * Math.sin((amt - 1.1) * 5 * Math.PI);
   }
 
 
@@ -2563,21 +2674,57 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function elasticInOut(amount) {
-    if (amount === 0) {
+  function elasticInOut(amt) {
+    if (amt === 0) {
       return 0;
     }
 
-    if (amount === 1) {
+    if (amt === 1) {
       return 1;
     }
 
-    amount *= 2;
-    if (amount < 1) {
-      return -0.5 * Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+    amt *= 2;
+    if (amt < 1) {
+      return -0.5 * Math.pow(2, 10 * (amt - 1)) * Math.sin((amt - 1.1) * 5 * Math.PI);
     }
 
-    return 0.5 * Math.pow(2, -10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI) + 1;
+    return 0.5 * Math.pow(2, -10 * (amt - 1)) * Math.sin((amt - 1.1) * 5 * Math.PI) + 1;
+  }
+
+
+  /**
+* backIn
+* @description Easing utility function
+* @return {function}
+*/
+  function backIn(amt) {
+    const s = 1.70158;
+    return amt === 1 ? 1 : amt * amt * ((s + 1) * amt - s);
+  }
+
+
+  /**
+* backOut
+* @description Easing utility function
+* @return {function}
+*/
+  function backOut(amt) {
+    const s = 1.70158;
+    return amt === 0 ? 0 : --amt * amt * ((s + 1) * amt + s) + 1;
+  }
+
+
+  /**
+* backInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function backInOut(amt) {
+    const s = 1.70158 * 1.525;
+    if ((amt *= 2) < 1) {
+      return 0.5 * (amt * amt * ((s + 1) * amt - s));
+    }
+    return 0.5 * ((amt -= 2) * amt * ((s + 1) * amt + s) + 2);
   }
 
 
@@ -2586,8 +2733,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function circularIn(amount) {
-    return 1 - Math.sqrt(1 - amount * amount);
+  function circularIn(amt) {
+    return 1 - Math.sqrt(1 - amt * amt);
   }
 
 
@@ -2596,8 +2743,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function circularOut(amount) {
-    return Math.sqrt(1 - --amount * amount);
+  function circularOut(amt) {
+    return Math.sqrt(1 - --amt * amt);
   }
 
   /**
@@ -2605,11 +2752,43 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description Easing utility function
 * @return {function}
 */
-  function circularInOut(amount) {
-    if ((amount *= 2) < 1) {
-      return -0.5 * (Math.sqrt(1 - amount * amount) - 1);
+  function circularInOut(amt) {
+    if ((amt *= 2) < 1) {
+      return -0.5 * (Math.sqrt(1 - amt * amt) - 1);
     }
-    return 0.5 * (Math.sqrt(1 - (amount -= 2) * amount) + 1);
+    return 0.5 * (Math.sqrt(1 - (amt -= 2) * amt) + 1);
+  }
+
+
+  /**
+* quinticIn
+* @description Easing utility function
+* @return {function}
+*/
+  function quinticIn(amt) {
+    return amt * amt * amt * amt * amt;
+  }
+
+
+  /**
+* quinticOut
+* @description Easing utility function
+* @return {function}
+*/
+  function quinticOut(amt) {
+    return --amt * amt * amt * amt * amt + 1;
+  }
+
+  /**
+* quinticInOut
+* @description Easing utility function
+* @return {function}
+*/
+  function quinticInOut(amt) {
+    if ((amt *= 2) < 1) {
+      return 0.5 * amt * amt * amt * amt * amt;
+    }
+    return 0.5 * ((amt -= 2) * amt * amt * amt * amt + 2);
   }
 
 
