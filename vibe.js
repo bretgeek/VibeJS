@@ -2178,6 +2178,8 @@ function Vibe($self = document, {fn={}} = {} ) {
     let unit = false;
     let move;
     let step;
+    let stepinc = 1;
+    let stepfn;
 
     if (options.move && isFunction(options.move)) {
       move = options.move;
@@ -2186,9 +2188,10 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
 
 
-    if (options.step && isFunction(options.step)) {
-      step = options.step;
+    if (options.stepfn && isFunction(options.stepfn)) {
+      stepfn = options.stepfn;
     }
+
 
     if (options.move && !isFunction(options.move)) {
       dir = options.move.dir || 'right';
@@ -2349,9 +2352,22 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       const progress = easing(timeFraction);
 
-      if (options.step && isFunction(options.step)) {
-        step($self, progress);
+
+      // really need a better way to figure this out but  this will have to do for now
+      // if there is not enough duration to complete the steps then increase duration
+      if (options.duration <= 5000 && step > 15) {
+        options.duration += 1000;
       }
+      if (options.step && isNumber(options.step)) {
+        step = options.step;
+        const stepcalc = Math.round(progress * step);
+        if (stepcalc == stepinc) {
+          stepinc++;
+          //   console.log(`do step function here: ${stepcalc}` );
+          stepfn($self, stepinc);
+        }
+      }
+
 
       if (options.move && isFunction(options.move)) {
         move($self, progress);
