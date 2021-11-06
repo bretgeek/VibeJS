@@ -2358,7 +2358,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         options.duration = stepinc * 1000;
       }
       // console.log(`duration is : ${options.duration}` );
-      if (options.step && isNumber(options.step)) {
+      if (options.step && isNumber(options.step) && isFunction(stepfn)) {
         step = options.step;
         const stepcalc = Math.round(progress * step);
         if (stepcalc == stepinc) {
