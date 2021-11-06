@@ -2343,7 +2343,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     const start = performance.now();
 
     requestAnimationFrame(function animate(time) {
-    // timeFraction от 0 до 1
+    // timeFraction to 0  1
       let timeFraction = (time - start) / options.duration;
       if (timeFraction > 1) timeFraction = 1;
 
@@ -2352,6 +2352,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (options.step && isFunction(options.step)) {
         step($self, progress);
       }
+
       if (options.move && isFunction(options.move)) {
         move($self, progress);
       } else {
