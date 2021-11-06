@@ -2361,12 +2361,18 @@ function Vibe($self = document, {fn={}} = {} ) {
       const progress = easing(timeFraction);
 
 
-      // If there is not enough duration to complete the steps then increase duration
+      // steps should divide evenly into duration for smoothness
       // you should use steps <= 10 for faster durations ~1000 for smoother tweens
+
       if (options.duration / options.step / options.step < options.step ) {
-        options.duration = stepinc * 1000;
+        // If there is not enough duration to complete the steps then increase duration
+        // options.duration = stepinc * 1000
+        // OR
+        // This one - If there is not enough duration to complete the steps cut steps to half as much
+        step = step / 2;
         if (options.debug) {
-          console.log(`duration of ${dur} was increased to ${options.duration} to fit ${options.step} steps.` );
+          // console.log(`duration of ${dur} was increased to ${options.duration} to fit ${options.step} steps.` );
+          console.log(`steps of ${options.step} was decreasedto fit ${dur} duration.` );
         }
       }
       // console.log(`duration is : ${options.duration}` );
