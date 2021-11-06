@@ -2364,7 +2364,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       // steps should divide evenly into duration for smoothness
       // you should use steps <= 10 for faster durations ~1000 for smoother tweens
 
-      if (options.duration / options.step / options.step < options.step ) {
+      if (options.step && !isFunction(options.step) && options.duration / options.step / options.step < options.step ) {
         // If there is not enough duration to complete the steps then increase duration
         // options.duration = stepinc * 1000
         // OR
@@ -2384,6 +2384,11 @@ function Vibe($self = document, {fn={}} = {} ) {
           //   console.log(`do step function here: ${stepcalc}` );
           stepfn($self, stepinc);
         }
+      }
+
+      // if step is a function and not a number for use with stepfn then run it simultaneuosly same as move
+      if (options.step && isFunction(options.step)) {
+        options.step($self, progress);
       }
 
 
