@@ -450,7 +450,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description  Get computed styles of element
 * @return computed stryles of an element
 */
-  function cs(prop, trim = false) {
+  function cs(prop, trim = true) {
     // these are not computed values but you may need them and forget you can just do $self.offset*
     if (prop === 'offsetLeft') {
       return $self.offsetLeft;
