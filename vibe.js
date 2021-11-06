@@ -2180,6 +2180,14 @@ function Vibe($self = document, {fn={}} = {} ) {
     let step;
     let stepinc = 1;
     let stepfn;
+    let dur;
+    // in case duration was not passed in and to set dur default duration to 1000
+    if (options.duration) {
+      dur = options.duration;
+    } else {
+      options.duration = 1000;
+      dur = 1000;
+    }
 
     if (options.move && isFunction(options.move)) {
       move = options.move;
@@ -2356,6 +2364,9 @@ function Vibe($self = document, {fn={}} = {} ) {
       // if there is not enough duration to complete the steps then increase duration
       if (options.duration / options.step / options.step < options.step ) {
         options.duration = stepinc * 1000;
+        if (options.debug) {
+          console.log(`duration of ${dur} was increased to ${options.duration} to fit ${options.step} steps.` );
+        }
       }
       // console.log(`duration is : ${options.duration}` );
       if (options.step && isNumber(options.step) && isFunction(stepfn)) {
