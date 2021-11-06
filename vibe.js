@@ -2353,11 +2353,11 @@ function Vibe($self = document, {fn={}} = {} ) {
       const progress = easing(timeFraction);
 
 
-      // really need a better way to figure this out but  this will have to do for now
       // if there is not enough duration to complete the steps then increase duration
-      if (options.duration <= 5000 && step > 15) {
-        options.duration += 1000;
+      if (options.duration / options.step / options.step < options.step ) {
+        options.duration = stepinc * 1000;
       }
+      // console.log(`duration is : ${options.duration}` );
       if (options.step && isNumber(options.step)) {
         step = options.step;
         const stepcalc = Math.round(progress * step);
