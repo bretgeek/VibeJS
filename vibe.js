@@ -2361,7 +2361,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       const progress = easing(timeFraction);
 
 
-      // if there is not enough duration to complete the steps then increase duration
+      // If there is not enough duration to complete the steps then increase duration
+      // you should use steps <= 10 for faster durations ~1000 for smoother tweens
       if (options.duration / options.step / options.step < options.step ) {
         options.duration = stepinc * 1000;
         if (options.debug) {
