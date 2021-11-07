@@ -2187,6 +2187,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     let stepinc = 1;
     let stepfn;
     let dur;
+
     // in case duration was not passed in and to set dur default duration to 1000
     if (options.duration) {
       dur = options.duration;
