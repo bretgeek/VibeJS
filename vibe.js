@@ -451,6 +451,12 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return computed stryles of an element
 */
   function cs(prop, trim = true) {
+    if (isDocument) {
+      return this;
+    }
+    if ( prop === 'position') {
+      return $self.style.position;
+    }
     // these are not computed values but you may need them and forget you can just do $self.offset*
     if (prop === 'offsetLeft') {
       return $self.offsetLeft;
@@ -2346,8 +2352,8 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     const cpos = $self.$cs('position');
     // console.log(cpos)
-    // start out change to relative if static - only do this with easing functions
-    if (cpos === 'static' && easing) {
+    // start out change to relative if position is static or doesn't exist - only do this with easing functions
+    if (cpos === 'static' && easing || !cpos && easing) {
       $self.$css(`position: relative;`);
     }
 
@@ -2364,19 +2370,20 @@ function Vibe($self = document, {fn={}} = {} ) {
       // steps should divide evenly into duration for smoothness
       // you should use steps <= 10 for faster durations ~1000 for smoother tweens
 
-      if (options.step && !isFunction(options.step) && options.duration / options.step / options.step < options.step ) {
-        // If there is not enough duration to complete the steps then increase duration
-        // options.duration = stepinc * 1000
-        // OR
-        // This one - If there is not enough duration to complete the steps cut steps to half as much
-        step = step / 2;
-        if (options.debug) {
-          // console.log(`duration of ${dur} was increased to ${options.duration} to fit ${options.step} steps.` );
-          console.log(`steps of ${options.step} was decreasedto fit ${dur} duration.` );
-        }
-      }
-      // console.log(`duration is : ${options.duration}` );
       if (options.step && isNumber(options.step) && isFunction(stepfn)) {
+        if (options.duration / options.step / options.step < options.step ) {
+          // If there is not enough duration to complete the steps then increase duration
+          // options.duration = stepinc * 1000
+          // OR
+          // This one - If there is not enough duration to complete the steps cut steps to half as much
+          step = step / 2;
+          if (options.debug) {
+            // console.log(`duration of ${dur} was increased to ${options.duration} to fit ${options.step} steps.` );
+            console.log(`steps of ${options.step} was decreasedto fit ${dur} duration.` );
+          }
+        }
+
+        // console.log(`duration is : ${options.duration}` );
         step = options.step;
         const stepcalc = Math.round(progress * step);
         if (stepcalc == stepinc) {
