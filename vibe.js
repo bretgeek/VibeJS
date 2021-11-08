@@ -444,6 +444,28 @@ function Vibe($self = document, {fn={}} = {} ) {
   }
 
 
+  function getCurrentRotation(el) {
+    const st = window.getComputedStyle(el, null);
+    const tm = st.getPropertyValue('-webkit-transform') ||
+           st.getPropertyValue('-moz-transform') ||
+           st.getPropertyValue('-ms-transform') ||
+           st.getPropertyValue('-o-transform') ||
+           st.getPropertyValue('transform') ||
+           'none';
+    if (tm != 'none') {
+      const values = tm.split('(')[1].split(')')[0].split(',');
+      /*
+      a = values[0];
+      b = values[1];
+      angle = Math.round(Math.atan2(b,a) * (180/Math.PI));
+      */
+      const angle = Math.round(Math.atan2(values[1], values[0]) * (180/Math.PI));
+      return (angle < 0 ? angle + 360 : angle); // add 360 degrees here when angle < 0 is equivalent to adding (2 * Math.PI) radians before
+    }
+    return 0;
+  }
+
+
   /**
 * cs
 * CS
@@ -454,6 +476,13 @@ function Vibe($self = document, {fn={}} = {} ) {
     if (isDocument) {
       return this;
     }
+
+    // there is no
+    if (prop == 'rotate') {
+      // console.log('ROTATE CS '+ getCurrentRotation($self))
+      return getCurrentRotation($self);
+    }
+
     if ( prop === 'position') {
       return $self.style.position;
     }
@@ -2308,17 +2337,17 @@ function Vibe($self = document, {fn={}} = {} ) {
       const tempcolor = $self.$cs(`${options.prop.transition}`) || '#FFF';
       // console.log(tempcolor);
 
-      const fromColor = options.prop.fromColor || tempcolor || '#FFFFFF';
+      const from = options.prop.from || tempcolor || '#FFFFFF';
       // console.log(fromColor);
-      const toColor = options.prop.toColor || '#FFFFFF';
+      const to = options.prop.to || '#FFFFFF';
 
       // change to function
       function chto(e) {
-        e.$css(`${options.prop.transition}: ${toColor}; transition: ${options.prop.transition} ${amt}s;`);
+        e.$css(`${options.prop.transition}: ${to}; transition: ${options.prop.transition} ${amt}s;`);
         // console.log(`fromColor ${fromColor} ${options.prop.transition}: ${toColor}; transition: ${options.prop.transition} ${amt}s;`)
       }
 
-      $self.$css(`${options.prop.transition}: ${fromColor};  transition: ${options.prop.transition} ${amt}s;`).$delay({time: options.duration || 1000, fn: chto});
+      $self.$css(`${options.prop.transition}: ${from};  transition: ${options.prop.transition} ${amt}s;`).$delay({time: options.duration || 1000, fn: chto});
       // console.log(amt)
     } else {
       if (options.prop && !options.prop.opacity) {
@@ -2345,7 +2374,30 @@ function Vibe($self = document, {fn={}} = {} ) {
           if (amt >= apropval || curamt >= apropval ) {
             amt = apropval;
           }
-          $self.$css(`${aprop}:  ${sign}${amt}${punit};`);
+
+          if (aprop !== 'rotate') {
+            $self.$css(`${aprop}:  ${sign}${amt}${punit};`);
+          } else {
+            amt = curamt + progress;
+            amt = Math.round(amt);
+            const rotTo = options.prop.to || false;
+
+            if (rotTo) {
+              // TODO negative rotation is not working
+              // console.log('ROTATE TO'+rotTo);
+              if (amt >= rotTo && !sign) {
+                amt = rotTo;
+              }
+            } else {
+              // keep spinning
+              if (amt >= 360 ) {
+                amt = 1;
+              }
+            }
+
+            // console.log('ROTATE '+amt);
+            $self.$css(`transform: rotate( ${sign}${amt}deg);`);
+          }
         };
       }// end all other props
     }
