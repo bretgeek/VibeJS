@@ -2905,7 +2905,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description find will break the chain and return the collection that is founda for further use elsewhere
 * @return {array}
 */
-  function find(select=false, {vibe=true, fn=false} = {}) {
+  function find(select=false, {vibe=true, fn=false, first=false} = {}) {
     let stk;
     if (!select) {
       return;
@@ -2925,8 +2925,11 @@ function Vibe($self = document, {fn={}} = {} ) {
         fn(s);
       }
     }
-
-    return stk;
+    if (first) {
+      return stk[0];
+    } else {
+      return stk;
+    }
   }
 
 
