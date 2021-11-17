@@ -1193,10 +1193,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description returns all parents and grandparents of $self and optionally vibes them and run functions on them
 * @return {Array}
 */
-  function parents( {str=false, fn=false, vibe=false, match=false} ) {
+  function parents( match=false, {fn=false, vibe=true} = {} ) {
     let stk = [];
     let matcharr;
     let els = $self;
+
+    if (isDocument) {
+      return this;
+    }
+
     // only parents that match selector string
     if (isString(match)) {
       matcharr = match.split(',');
@@ -1245,7 +1250,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description returns all children and grandchildren of $self and optionally vibes them and run functions on them
 * @return {Array}
 */
-  function children( {match=false, fn=false, vibe=false} ) {
+  function children( match=false, {fn=false, vibe=true} = {} ) {
     const stk = [];
 
     let matcharr;
@@ -1253,7 +1258,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     const els = $self;
     const col = $self.getElementsByTagName('*');
 
-    // only parents that match selector string
+    // only children that match selector string
     if (isString(match)) {
       matcharr = match.split(',');
 
@@ -1261,12 +1266,13 @@ function Vibe($self = document, {fn={}} = {} ) {
         matcharr.forEach((m) => {
           m = m.trim();
           if (y.matches(m) ) {
-            stk.push(els);
+          // console.log(y)
+            stk.push(y);
           }
         });
       }
     }
-    // all parents
+    // all children
     if (!match) {
       for ( const y of col) {
         stk.push(y);
@@ -1288,6 +1294,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
       }
     }
+    console.log(stk);
     return stk;
   }
 
@@ -2893,6 +2900,37 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
   /**
+* find
+* FIND
+* @description find will break the chain and return the collection that is founda for further use elsewhere
+* @return {array}
+*/
+  function find(select=false, {vibe=true, fn=false} = {}) {
+    let stk;
+    if (!select) {
+      return;
+    } else {
+      if (isDocument) {// if called with vibe
+        stk = $vibe.select(`${select}`, {all: true});
+      } else {
+        stk = $self.$select(`${select}`, {all: true});
+      }
+    }
+
+    if (isFunction(fn) && stk.length) {
+      for (const s of stk) {
+        if (vibe) {
+          s.$ = Vibe().render(s);
+        }
+        fn(s);
+      }
+    }
+
+    return stk;
+  }
+
+
+  /**
 * each
 * EACH
 * @description For $vibe.each OR  el.$each - selects variable amount of selectors from within an element (from document if $vibe.each) optionally vibe them (on by default) and run fn against them. Chained methods do affect the selectors passed from the each only the element from which it was called. To affect the selectors passed to $each you must use fn. $vibe.each  selectors will be affected by the chain itself. Use $vibe.each when you want to traverse from the top level document. use el.$each to select elements from within el and run a function against the vibed elements it finds.
@@ -3012,6 +3050,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     stream: [],
     animate: animate,
     each: each,
+    find: find,
     stk: [],
   };
 
