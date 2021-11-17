@@ -2392,7 +2392,6 @@ function Vibe($self = document, {fn={}} = {} ) {
         aprop = aprop.replace(/_/g, '-');
         apropval = Object.entries(options.prop)[0][1] || null;// the prop: value
         curamt = $self.$cs(`${aprop}`, true);
-        // console.log('curamt is'+curamt);
         // console.log(aprop)
         move = function(progress) {
           curamt = $self.$cs(`${aprop}`, true);
@@ -2404,6 +2403,11 @@ function Vibe($self = document, {fn={}} = {} ) {
           if (!isInt(curamt)) {
             amt = curamt + progress;
             punit = '';
+            if (amt > apropval || curamt > apropval ) {
+              amt = curamt - progress;
+            } else {
+              amt = curamt + progress;
+            }
           } else {
             if (amt > apropval || curamt > apropval ) {
               amt = Math.round(curamt - 1) - Math.round(progress * 100 );
