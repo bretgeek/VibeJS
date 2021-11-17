@@ -2396,17 +2396,20 @@ function Vibe($self = document, {fn={}} = {} ) {
         // console.log(aprop)
         move = function(progress) {
           curamt = $self.$cs(`${aprop}`, true);
+          if ( curamt == apropval) {
+            return;
+          }
           let amt;
           // for props with real number/decimals values
           if (!isInt(curamt)) {
             amt = curamt + progress;
             punit = '';
           } else {
-            amt = Math.round(curamt + (progress * 2));
-          }
-
-          if (amt >= apropval || curamt >= apropval ) {
-            amt = apropval;
+            if (amt > apropval || curamt > apropval ) {
+              amt = Math.round(curamt - 1) - Math.round(progress * 100 );
+            } else {
+              amt = Math.round(curamt + 1);
+            }
           }
 
           if (aprop !== 'rotate') {
