@@ -1120,11 +1120,38 @@ function Vibe($self = document, {fn={}} = {} ) {
     return this;
   }
 
+
+  /**
+ * toggle
+ * TOGGLE
+* @description  set or unset a class name or list of classes if element has the class it will be removed else it will be added
+* @return this
+ */
+  function toggle(str=false) {
+    if (isDocument) {
+      return this;
+    }
+
+    if (str) {
+      const selectors = str.split(',');
+      for (let s of selectors) {
+        s = s.trim();
+        s = s.replace(/\./g, '');
+        if ($self.classList.contains(s)) {
+          $self.$removeClass(s);
+        } else {
+          $self.$addClass(s);
+        }
+      }
+    }
+    return this;
+  }
+
   /**
 * attr
 * ATTR
-* set or return attr
-@return this or attr
+* @description  set or return attr
+* @return this or attr
 */
   function attr(str, s = false, r = false) {
     if (isDocument) {
@@ -1153,7 +1180,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * dataset
 * DATASET
 * @description set or return data
-@return this  dataset if document
+* @return this  dataset if document
 */
   function dataset() {
     if (isDocument) {
@@ -2917,11 +2944,15 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
     }
 
-    if (isFunction(fn) && stk.length) {
+    if (stk.length) {
       for (const s of stk) {
         if (vibe) {
           s.$ = Vibe().render(s);
         }
+      }
+    }
+    if (isFunction(fn) && stk.length) {
+      for (const s of stk) {
         fn(s);
       }
     }
@@ -3054,6 +3085,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     animate: animate,
     each: each,
     find: find,
+    toggle: toggle,
     stk: [],
   };
 
