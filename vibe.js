@@ -1377,7 +1377,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return boolean
 */
   function isObject(thing) {
-    // arrays are objects too so use isArray if you want to find arrays
     if (Object.prototype.toString.call(thing).slice(8, -1) === 'Object') {
       return true;
     } else {
