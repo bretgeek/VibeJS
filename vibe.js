@@ -1378,8 +1378,13 @@ function Vibe($self = document, {fn={}} = {} ) {
 */
   function isObject(thing) {
     // arrays are objects too so use isArray if you want to find arrays
-    return typeof thing === 'object';
+    if (Object.prototype.toString.call(thing).slice(8, -1) === 'Object') {
+      return true;
+    } else {
+      return false;
+    }
   }
+
 
   /**
 * isElement
@@ -1388,8 +1393,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return boolean
 */
   function isElement(thing) {
-    // arrays are objects too so use isArray if you want to find arrays
-    return isObject(thing) && thing.nodeType == 1;
+    return thing.nodeType == 1;
   }
 
 
