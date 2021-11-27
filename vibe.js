@@ -1983,7 +1983,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 *   function dropfn({dragee=false, dropee=false} ){  console.log('DROPPED '+dragee.$text());  }
 *@return {object}
 */
-  function drag({draghandle=false, contain='body', dropfn=false, drop=false, zIndex=1} = {} ) {
+  function drag({draghandle=false, contain='body', dropfn=false, drop=false, over=false, overfn=false, zIndex=1} = {} ) {
     const dragee = $self;
     let active = false;
     let currentX;
@@ -1998,6 +1998,11 @@ function Vibe($self = document, {fn={}} = {} ) {
     let dropEl;
     if (drop && isString(drop) ) {
       dropEl = document.querySelector(drop);
+    }
+
+    let overEl;
+    if (over && isString(over) ) {
+      overEl = document.querySelector(over);
     }
 
     parentContainer.addEventListener('touchstart', dragStart, false);
@@ -2064,6 +2069,11 @@ function Vibe($self = document, {fn={}} = {} ) {
           currentX = e.clientX - initialX;
           currentY = e.clientY - initialY;
         }
+
+        if (overEl && dragee.$isTouching({el: overEl}) && isFunction(overfn) && active) {
+          overfn({dragee: $self, dropee: overEl} );
+        }
+
 
         xOffset = currentX;
         yOffset = currentY;
