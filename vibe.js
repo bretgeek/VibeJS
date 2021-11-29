@@ -68,6 +68,52 @@ function Vibe($self = document, {fn={}} = {} ) {
   }// end read
 
 
+  /**
+* templateReplacer
+* TEMPLATEREPLACER
+* @description replace {{ strings }} with replacement strings in obj
+*/
+  function templateReplacer(e, obj, {html=false} = {} ) {
+    // If we have already been here operate on original template - i.e. subsquent calls with new data in obj
+    // console.log('OBJ is ' + JSON.stringify(obj))
+    if (e.templateText) {
+      if (html) {
+        e.$html(e.templateHtml);
+      } else {
+        e.$text(e.templateText);
+      }
+    }
+
+    const origtext = e.$text();
+    const orightml = e.$html();
+    e.templateText = origtext;
+    e.templateHTML = orightml;
+
+    const keys = Object.keys(obj);
+    for (const r of keys) {
+      let elText = e.$text();
+      if (html) {
+        elText = e.$html();
+      }
+      elText = elText.replace(/\{\{\s*/g, '{{');
+      elText = elText.replace(/\s*\}\}/g, '}}');
+      //  console.log('eltext ' + elText)
+      if (obj.hasOwnProperty(r)) {
+      //      console.log('r is '+r)
+        const pat = `{{${r}}}`;
+        const re = new RegExp(pat, 'g');
+        const newtext = elText.replace(re, `${obj[r]}`);
+        if (html) {
+          e.$html(newtext);
+        } else {
+          e.$text(newtext);
+        }
+      }
+    }
+    return this;
+  }
+
+
   /* RENDER */
 
   /**
@@ -76,7 +122,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @param {function} component - required, the component function to render
 * @param {object} {} - optional with defaults
 */
-  function render(component, {to = 'body', type = 'div', position = 'append', state={}, props = {}, plugin = {}, events = {}, className='vibe'} = {} ) {
+  function render(component, {to = 'body', type = 'div', position = 'append', state={}, props = {}, plugin = {}, events = {}, vdata = {}, className='vibe'} = {} ) {
     // If to is a string and not and existing node i.e. an id or class we must query for it.
     let towhere = to;
     if (!isElement(towhere)) {
@@ -114,8 +160,22 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
       }
 
+
       newComponent.$props = props; // The passed in props obj
       newComponent.$self = newComponent;
+
+      const vkeys = Object.keys(vdata);
+      newComponent.$vdata = vdata; // The passed in props obj
+      templateReplacer(newComponent, vdata);
+      for (const k of vkeys) {
+        const st = k;// k.toString();
+        const $st = k;// k.toString();
+		 newComponent[st] = function(s=false) {
+          if (s) {
+            console.log('s is '+s); newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
+          }
+        };
+      }
 
       // The state if passed in via component OR by render
       if (el.state) {
@@ -3096,6 +3156,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     queue: queue,
     fadeIn: fadeIn,
     fadeOut: fadeOut,
+    templateReplacer: templateReplacer,
     q: [],
     runq: runq,
     isrun: false,
