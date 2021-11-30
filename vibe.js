@@ -67,6 +67,18 @@ function Vibe($self = document, {fn={}} = {} ) {
     }, fallbacktime);
   }// end read
 
+  /**
+* templater
+* TEMPLATER
+* @description access templateReplacer from individual elements ($self)
+*/
+  function templater(obj, {html=false} = {} ) {
+    if (isDocument) { // use templateReplacer from $vibe instead
+      return this;
+    }
+    templateReplacer($self, obj, {html: html} );
+    return this;
+  }
 
   /**
 * templateReplacer
@@ -440,7 +452,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return collection or false if none
 */
 
-  function select(str, {all = false, vibe = true, fn = false} = {} ) {
+  function select(str, {all = false, vibe = true, fn = false, vdata = {}} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
@@ -452,8 +464,16 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
 
       if (single) {
+        if (isObject(vdata) && vdata.length) {
+          templateReplacer(single, vdata);
+        }
+
         if (vibe) {
           single.$ = Vibe().render(single);
+
+          if (isObject(vdata) && !isEmpty(vdata) ) {
+            templateReplacer(single, vdata);
+          }
         }
 
         if (isFunction(fn)) {
@@ -469,6 +489,10 @@ function Vibe($self = document, {fn={}} = {} ) {
         if (vibe) {
           collection.forEach((e) => {
             e.$ = Vibe().render(e);
+
+            if (isObject(vdata) && !isEmpty(vdata) ) {
+              templateReplacer(e, vdata);
+            }
           });
         }
 
@@ -485,7 +509,9 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
-
+  function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
   /**
 * rpx
 * RPX
@@ -3157,6 +3183,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     fadeIn: fadeIn,
     fadeOut: fadeOut,
     templateReplacer: templateReplacer,
+    templater: templater,
     q: [],
     runq: runq,
     isrun: false,
