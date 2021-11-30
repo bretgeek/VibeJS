@@ -72,7 +72,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * TEMPLATER
 * @description access templateReplacer from individual elements ($self)
 */
-  function templater(obj, {html=false} = {} ) {
+  function templater(obj, {html=true} = {} ) {
     if (isDocument) { // use templateReplacer from $vibe instead
       return this;
     }
@@ -85,12 +85,12 @@ function Vibe($self = document, {fn={}} = {} ) {
 * TEMPLATEREPLACER
 * @description replace {{ strings }} with replacement strings in obj
 */
-  function templateReplacer(e, obj, {html=false} = {} ) {
-    // If we have already been here operate on original template - i.e. subsquent calls with new data in obj
+  function templateReplacer(e, obj, {html=true} = {} ) {
+    // If we have already been here operate on original template - i.e. subsequent calls with new data in obj
     // console.log('OBJ is ' + JSON.stringify(obj))
     if (e.templateText) {
       if (html) {
-        e.$html(e.templateHtml);
+        e.$html(e.templateHTML);
       } else {
         e.$text(e.templateText);
       }
