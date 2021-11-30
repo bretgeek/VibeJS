@@ -177,14 +177,14 @@ function Vibe($self = document, {fn={}} = {} ) {
       newComponent.$self = newComponent;
 
       const vkeys = Object.keys(vdata);
-      newComponent.$vdata = vdata; // The passed in props obj
+      newComponent.$vdata = vdata; // The passed in vdata obj
       templateReplacer(newComponent, vdata);
       for (const k of vkeys) {
-        const st = k;// k.toString();
-        const $st = k;// k.toString();
+        const st = k;
+        const $st = k;
 		 newComponent[st] = function(s=false) {
           if (s) {
-            console.log('s is '+s); newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
+            newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
           }
         };
       }
@@ -464,15 +464,21 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
 
       if (single) {
-        if (isObject(vdata) && vdata.length) {
-          templateReplacer(single, vdata);
-        }
-
         if (vibe) {
           single.$ = Vibe().render(single);
 
-          if (isObject(vdata) && !isEmpty(vdata) ) {
+          if (isObject(vdata) && !isEmpty(vdata)) {
+            const vkeys = Object.keys(vdata);
+            single.$vdata = vdata; // The passed in vdata obj
             templateReplacer(single, vdata);
+            for (const k of vkeys) {
+              const st = k;
+		 single[st] = function(s=false) {
+                if (s) {
+                  single.$vdata[st] = s; templateReplacer(single, single.$vdata);
+                }
+              };
+            }
           }
         }
 
@@ -490,8 +496,18 @@ function Vibe($self = document, {fn={}} = {} ) {
           collection.forEach((e) => {
             e.$ = Vibe().render(e);
 
-            if (isObject(vdata) && !isEmpty(vdata) ) {
+            if (isObject(vdata) && !isEmpty(vdata)) {
+              const vkeys = Object.keys(vdata);
+              e.$vdata = vdata; // The passed in vdata obj
               templateReplacer(e, vdata);
+              for (const k of vkeys) {
+                const st = k;
+		 e[st] = function(s=false) {
+                  if (s) {
+                    e.$vdata[st] = s; templateReplacer(e, e.$vdata);
+                  }
+                };
+              }
             }
           });
         }
