@@ -1297,7 +1297,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description set or return data-attrs
 @return {primitive}
 */
-  function data(a, r='set') {
+  function data(a, r='get') {
     const e = $self;
     if (isDocument) {
       return this;
