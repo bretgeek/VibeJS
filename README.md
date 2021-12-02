@@ -15,7 +15,7 @@ If you are looking for an alternative to bigger libraries like VueJS and React w
 Visit **https://vibejs.com** for updates and info.
 
 ## Features
-* Small - currently under ~22KB minified (smaller if gzipped).
+* Small - currently under ~25KB minified (smaller if gzipped).
 * Can be used as a general purpose JQuery like library.
 * Create self contained components for composing larger components and apps.
 * Optionally access components externallyrom each other.
