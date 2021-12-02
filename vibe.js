@@ -452,7 +452,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return collection or false if none
 */
 
-  function select(str, {all = false, vibe = true, fn = false, vdata = {}} = {} ) {
+  function select(str, {all = false, vibe = true, fn = false, plugin = false, vdata = {}} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
@@ -480,6 +480,10 @@ function Vibe($self = document, {fn={}} = {} ) {
               };
             }
           }
+        }
+
+        if (isFunction(plugin)) {
+          single[plugin.name] = plugin;
         }
 
         if (isFunction(fn)) {
@@ -511,6 +515,13 @@ function Vibe($self = document, {fn={}} = {} ) {
             }
           });
         }
+
+        if (isFunction(plugin)) {
+          collection.forEach( (c) => {
+            c[plugin.name] = plugin;
+          });
+        }
+
 
         if (isFunction(fn)) {
           collection.forEach( (c) => {
