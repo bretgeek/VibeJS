@@ -163,8 +163,19 @@ function Vibe($self = document, {fn={}} = {} ) {
       newComponent.classList.add(className);
 
 
-      // Access plugins by self.$plugin.name(); sent in by component OR render but not both
-      newComponent.$plugin = plugin; // the passed in plugins from render
+      // Access plugins by self.$name(); sent in by component OR render but not both
+      // example:  plugin: { plg: function(){ console.log('PLG'); return this;  }, } . Must return this to make chainable
+
+      if (isObject(plugin)) {
+        const pkeys = Object.keys(plugin);
+        for ( const k of pkeys) {
+          // console.log('wut '+plugin[k])
+          if (isFunction(plugin[k])) {
+            plugin[k].bind(this, newComponent);
+            newComponent[`$${k}`] = plugin[k];
+          }
+        }
+      }
 
       if (el.fn) {
         if (Object.keys(el.fn).length > 0) {
@@ -262,24 +273,16 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (component.nodeType === 1) {
         component.$ = new Vibe(component);
 
-        // Access plugins by self.$plugin.name();
-        component.$plugin = plugin; // The passed in plugins can come from render obj on existing elements are not chainable.
-
-        // Because component plugin functions  may not have a name they are unchainable
-        //  Use Select method to make plugins on existing elements like:
-
-
-        /*
-        // a chainable plugin function via select
-        let plg = function(t){ // here the plg is the name
-        console.log('Plugged')
-        console.log('self is '+t)
-        return t;
-        };
-        */
-
-        //  let h3 = $vibe.select('.h3', {plugin: plg});
-        // h3.plg(h3).$css('color:blue;').$text('not h3'); // plg is the name pass in h3 to keep chainable
+        // Access plugins by self.$name();
+        if (isObject(plugin)) {
+          const ckeys = Object.keys(plugin);
+          for ( const k of ckeys) {
+            if (isFunction(plugin[k])) {
+              plugin[k].bind(this, component);
+              component[`$${k}`] = plugin[k];
+            }
+          }
+        }
 
 
         component.classList.add(className);
@@ -331,7 +334,18 @@ function Vibe($self = document, {fn={}} = {} ) {
         newComponent.classList.add(className);
         newComponent.$state = state;
         newComponent.$origState = state;
-        newComponent.$plugin = plugin; // The passed in plugins obj just like fn
+
+        if (isObject(plugin)) {
+          const pkeys = Object.keys(plugin);
+          for ( const k of pkeys) {
+            // console.log('wut '+plugin[k])
+            if (isFunction(plugin[k])) {
+              plugin[k].bind(this, newComponent);
+              newComponent[`$${k}`] = plugin[k];
+            }
+          }
+        }
+
 
         // The passed in events/on obj
         // For each event in on obj, create events
@@ -466,10 +480,26 @@ function Vibe($self = document, {fn={}} = {} ) {
 * select
 * SELECT
 * @description select elements of another element optionionally vibe them
+
+*       //  Use Select to make plugins on existing elements like:
+*
+*
+*
+*        // a chainable plugin function via select must return this
+*        let plg = function(){
+*        console.log('Plugged')
+*        console.log('self is '+this)
+*        return this;
+*        };
+*
+*
+*         // let h3 = $vibe.select('.h3', {plugin: { plg: plg} });
+*         // h3.$plg(h3).$css('color:blue;').$text('not h3'); // plg is the name pass in h3 to keep chainable
+*
 * @return collection or false if none
 */
 
-  function select(str, {all = false, vibe = true, fn = false, plugin = false, vdata = {}} = {} ) {
+  function select(str, {all = false, vibe = true, fn = false, plugin = {}, vdata = {}} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
@@ -499,9 +529,16 @@ function Vibe($self = document, {fn={}} = {} ) {
           }
         }
 
-        if (isFunction(plugin)) {
-          single[plugin.name] = plugin;
+        if (isObject(plugin)) {
+          const pkeys = Object.keys(plugin);
+          for ( const k of pkeys) {
+            if (isFunction(plugin[k])) {
+              plugin[k].bind(this, single);
+              single[`$${k}`] = plugin[k];
+            }
+          }
         }
+
 
         if (isFunction(fn)) {
           fn(single);
@@ -533,10 +570,17 @@ function Vibe($self = document, {fn={}} = {} ) {
           });
         }
 
-        if (isFunction(plugin)) {
-          collection.forEach( (c) => {
-            c[plugin.name] = plugin;
-          });
+        if (isObject(plugin)) {
+          const pkeys = Object.keys(plugin);
+          for ( const k of pkeys) {
+            if (isFunction(plugin[k])) {
+              plugin[k].bind(this, single);
+              collection.forEach( (c) => {
+                plugin.bind(this, c);
+                c[plugin.name] = plugin;
+              });
+            }
+          }
         }
 
 
@@ -1599,26 +1643,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     return $self.id;
   }
 
-
-  /**
-* addplug
-* ADDPLUG
-* @description Not recommended for use the prefered way to add a plug is component level or at component render obj
-* @return this
-*/
-  function addplug(fn) {
-    if (isFunction(fn)) {
-      const name = fn.name;
-
-      if (isDocument) {
-      // document.plugins[name] = fn;
-        document.$plugin[name] = fn;
-      } else {
-        $self.$plugin[name] = fn;
-      }
-    }
-    return this;
-  }
 
   /**
 * run
@@ -3187,7 +3211,6 @@ function Vibe($self = document, {fn={}} = {} ) {
     data: data,
     detach: detach,
     render: render,
-    addplug: addplug,
     run: run,
     plugin: {},
     doc: document,
