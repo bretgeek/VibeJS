@@ -263,7 +263,24 @@ function Vibe($self = document, {fn={}} = {} ) {
         component.$ = new Vibe(component);
 
         // Access plugins by self.$plugin.name();
-        component.$plugin = plugin; // The passed in plugins  can only come from render obj on existing elements
+        component.$plugin = plugin; // The passed in plugins can come from render obj on existing elements are not chainable.
+
+        // Because component plugin functions  may not have a name they are unchainable
+        //  Use Select method to make plugins on existing elements like:
+
+
+        /*
+        // a chainable plugin function via select
+        let plg = function(t){ // here the plg is the name
+        console.log('Plugged')
+        console.log('self is '+t)
+        return t;
+        };
+        */
+
+        //  let h3 = $vibe.select('.h3', {plugin: plg});
+        // h3.plg(h3).$css('color:blue;').$text('not h3'); // plg is the name pass in h3 to keep chainable
+
 
         component.classList.add(className);
 
@@ -314,7 +331,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         newComponent.classList.add(className);
         newComponent.$state = state;
         newComponent.$origState = state;
-        newComponent.$plugin = plugin; // The passed in plugins oj just like fn
+        newComponent.$plugin = plugin; // The passed in plugins obj just like fn
 
         // The passed in events/on obj
         // For each event in on obj, create events
