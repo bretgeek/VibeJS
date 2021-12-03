@@ -163,8 +163,9 @@ function Vibe($self = document, {fn={}} = {} ) {
       newComponent.classList.add(className);
 
 
-      // Access plugins by self.$name(); sent in by component OR render but not both
-      // example:  plugin: { plg: function(){ console.log('PLG'); return this;  }, } . Must return this to make chainable
+      // Access plugins by self.$name(); sent in by component OR render but not both.
+      // example:  plugin: { plg: function(){ console.log('PLG'); return this;  }, }
+      // Functions passed via plugin object must return this to make them chainable.
 
       if (isObject(plugin)) {
         const pkeys = Object.keys(plugin);
@@ -482,8 +483,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description select elements of another element optionionally vibe them
 
 *       //  Use Select to make plugins on existing elements like:
-*
-*
 *
 *        // a chainable plugin function via select must return this
 *        let plg = function(){
