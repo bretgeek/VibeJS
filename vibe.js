@@ -596,9 +596,17 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
   }
 
+  /**
+* isEmpty
+* ISEMPTY
+*@description  Internal helper function to Check if Object is an empty opject.
+* @return  boolean
+*
+*/
   function isEmpty(obj) {
     return Object.keys(obj).length === 0;
   }
+
   /**
 * rpx
 * RPX
