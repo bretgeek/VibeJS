@@ -191,13 +191,13 @@ export const App = () => {
 ```js
 import {App} from '/src/App.js';
 
-function tip() {console.log('tip') };
+function tip() {console.log('tip'); return this; }; // return this to make chainable
 const Appref = $vibe.render(App, {
     to: '#app',
     position: 'append',
     plugin: {tip: tip} ,
 });
-Appref.$plugin.tip();
+Appref.$tip();
 ```
 
 #### bundle it to dist/main.js  with.
