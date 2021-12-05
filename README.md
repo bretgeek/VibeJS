@@ -18,8 +18,9 @@ Visit **https://vibejs.com** for updates and info.
 * Small - currently under ~25KB minified (smaller if gzipped).
 * Can be used as a general purpose JQuery like library.
 * Create self contained components for composing larger components and apps.
-* Optionally access components externallyrom each other.
+* Optionally access components externally from each other.
 * Rendered components receive built-in methods (the Vibe).
+* Reactive {{template}} templating.
 * Easy Familiar syntax with built-in chainable DOM manipulation methods.
 * Built-in Drag, Drop, Swipe.
 * Built-in delay queue.
