@@ -127,7 +127,7 @@ myRef.$fn.func();
 
 // Reactive!
 
-// When your app recieves new data, the vdata object and {{ message }} in the template let you update {{ message }} to new values with:
+// When your app receives new data, the vdata object and {{ message }} in the template let you update {{ message }} to new values with:
 // ( i.e. from "Hello Vibe!" to "I am Vibed!") 
 
 myRef.message("I am Vibed");
