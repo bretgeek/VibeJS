@@ -46,7 +46,7 @@ Visit **https://vibejs.com** for updates and info.
 ```js
 const myComponent = () => {
 
-    const template = `<div>Hey, I am app!</div>`;
+    const template = `<div> {{message}} Hey, I am app!</div>`;
     
     const func = function say() {
         console.log('I am app')
@@ -97,8 +97,15 @@ const myComponent = () => {
 
 const myRef = $vibe.render(myComponent, {
     to: '#app',
+
     position: 'append',
+
     className: 'renderedComponent',
+
+    vdata: {
+    message: 'Hello Vibe!'
+  }
+
 });
 ```
  * Note: You can render a component as many times as you want with different reference names.
@@ -116,6 +123,14 @@ myRef.$css('display: inline-block').$text('Hey hey!');
 
 myRef.$fn.func(); 
 
+
+
+// Reactive!
+
+// When your app recieved new data, the vdata object and {{ message }} in the template let you update {{ message }} to new values with:
+// ( i.e. from "Hello Vibe!" to "I am Vibed!") 
+
+myRef.message("I am Vibed");
 
 
 // Tack on more events with $on 
