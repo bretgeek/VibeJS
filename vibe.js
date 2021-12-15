@@ -229,7 +229,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
       }
 
-      newComponent.id = uuidv4();
+      newComponent.id = 'v'+uuidv4();
 
 
       if (isElement(towhere)) {
@@ -305,7 +305,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
         // Existing elements may have an id and if so use that instead
         if (!component.id) {
-          component.id = uuidv4();
+          component.id = 'v'+uuidv4();
         }
         return component;
       }
@@ -358,7 +358,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
 
 
-        newComponent.id = uuidv4();
+        newComponent.id = 'v'+uuidv4();
         ready(mount(newComponent, towhere, position));
         return newComponent;
       }
@@ -1243,7 +1243,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     const clone = $self.cloneNode(true);
     clone.$ = new Vibe(clone);
-    clone.id = uuidv4();
+    clone.id = 'v'+uuidv4();
     if (to) {
       if (!isElement(to)) {
         to = document.querySelector(to);
