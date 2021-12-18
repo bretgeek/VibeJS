@@ -272,8 +272,10 @@ function Vibe($self = document, {fn={}} = {} ) {
       // Note: existing elements must pass in fn, events, plugins, className, state via render obj
       // because there is no function/obj to get them from
       if (component.nodeType === 1) {
-        component.$ = new Vibe(component);
-
+        // it may already be vibed
+        if (!component.$) {
+          component.$ = new Vibe(component);
+        }
         // Access plugins by self.$name();
         if (isObject(plugin)) {
           const ckeys = Object.keys(plugin);
