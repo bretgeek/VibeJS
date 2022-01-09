@@ -500,7 +500,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return collection or false if none
 */
 
-  function select(str, {all = false, vibe = true, fn = false, plugin = {}, vdata = {}} = {} ) {
+  function select(str, {all = false, vibe = true, fn = false, plugin = {}, inject = false, vdata = {}} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
@@ -516,6 +516,9 @@ function Vibe($self = document, {fn={}} = {} ) {
           single.$ = Vibe().render(single);
 
           if (isObject(vdata) && !isEmpty(vdata)) {
+            if (isString(inject)) {
+              single.$append(inject);
+            }
             const vkeys = Object.keys(vdata);
             single.$vdata = vdata; // The passed in vdata obj
             templateReplacer(single, vdata);
@@ -556,6 +559,9 @@ function Vibe($self = document, {fn={}} = {} ) {
             e.$ = Vibe().render(e);
 
             if (isObject(vdata) && !isEmpty(vdata)) {
+              if (isString(inject)) {
+                e.$append(inject);
+              }
               const vkeys = Object.keys(vdata);
               e.$vdata = vdata; // The passed in vdata obj
               templateReplacer(e, vdata);
