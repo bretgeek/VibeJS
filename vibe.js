@@ -547,7 +547,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
           if (isObject(vdata) && !isEmpty(vdata)) {
             if (isString(inject)) {
-              single.$append(inject);
+              single.$append(`${inject}`);
             }
             const vkeys = Object.keys(vdata);
             single.$vdata = vdata; // The passed in vdata obj
