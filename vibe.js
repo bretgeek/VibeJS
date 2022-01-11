@@ -199,7 +199,6 @@ function Vibe($self = document, {fn={}} = {} ) {
       templateReplacer(newComponent, vdata);
       for (const k of vkeys) {
         const st = k;
-        const $st = k;
 		 newComponent[st] = function(s=false) {
           if (s) {
             newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
@@ -300,7 +299,6 @@ function Vibe($self = document, {fn={}} = {} ) {
         templateReplacer(component, vdata);
         for (const k of vkeys) {
           const st = k;
-          const $st = k;
 		 component[st] = function(s=false) {
             if (s) {
               component.$vdata[st] = s; templateReplacer(component, component.$vdata);
@@ -376,7 +374,6 @@ function Vibe($self = document, {fn={}} = {} ) {
         templateReplacer(newComponent, vdata);
         for (const k of vkeys) {
           const st = k;
-          const $st = k;
 		 newComponent[st] = function(s=false) {
             if (s) {
               newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
@@ -520,7 +517,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description parse element for template strings
 * @return object
 */
-
   function autoTemplateParse(e) {
     const allText = e.$text();
     const re = /{{(.*?)}}/g;
