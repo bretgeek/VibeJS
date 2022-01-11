@@ -188,6 +188,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       newComponent.$props = props; // The passed in props obj
       newComponent.$self = newComponent;
 
+      // vdate templates
       const vkeys = Object.keys(vdata);
       newComponent.$vdata = vdata; // The passed in vdata obj
       templateReplacer(newComponent, vdata);
@@ -288,6 +289,21 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
 
 
+        // vdate templates
+        const vkeys = Object.keys(vdata);
+        component.$vdata = vdata; // The passed in vdata obj
+        templateReplacer(component, vdata);
+        for (const k of vkeys) {
+          const st = k;
+          const $st = k;
+		 component[st] = function(s=false) {
+            if (s) {
+              component.$vdata[st] = s; templateReplacer(component, component.$vdata);
+            }
+          };
+        }
+
+
         component.classList.add(className);
 
         component.$props = props; // The passed in props obj
@@ -347,6 +363,20 @@ function Vibe($self = document, {fn={}} = {} ) {
               newComponent[`$${k}`] = plugin[k];
             }
           }
+        }
+
+        // vdate templates
+        const vkeys = Object.keys(vdata);
+        newComponent.$vdata = vdata; // The passed in vdata obj
+        templateReplacer(newComponent, vdata);
+        for (const k of vkeys) {
+          const st = k;
+          const $st = k;
+		 newComponent[st] = function(s=false) {
+            if (s) {
+              newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
+            }
+          };
         }
 
 
@@ -1141,6 +1171,8 @@ function Vibe($self = document, {fn={}} = {} ) {
   function createNode(nodetype = 'div', {
     override = false,
     position = false,
+    inject = false,
+    vdata = false,
     to = false,
   } = {}) {
     const allowedNodes = ['html', 'head', 'link', 'meta', 'script', 'style', 'title', 'body', 'article', 'aside', 'footer', 'header', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'main', 'nav', 'section', 'blockquote', 'div', 'figure', 'hr', 'li', 'ol', 'p', 'pre', 'ul', 'a', 'code', 'data', 'time', 'em', 'i', 'span', 'strong', 'audio', 'source', 'img', 'track', 'video', 'iframe', 'svg', 'canvas', 'noscript', 'col', 'colgroup', 'button', 'option', 'fieldset', 'label', 'form', 'input', 'select', 'textarea', 'menu', 'template'];
@@ -1153,7 +1185,10 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     const newnode = document.createElement(nodetype);
     const node = newnode;
-    node.$ = Vibe().render(newnode);
+    node.$ = Vibe().render(newnode, {vdata: vdata});
+    if (inject) {
+      node.$html(inject);
+    }
 
     if (!to) {
       to = $self;
