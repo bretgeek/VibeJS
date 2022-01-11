@@ -144,7 +144,6 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     if (isFunction(component)) {
       const el = component();
-      // TODO what else do we need here, anything?
       if (isDocument) {
       }
 
@@ -155,6 +154,12 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (el.template && el.template.length) {
         newComponent.innerHTML = el.template;
       }
+
+      // if vdata is empty parse the element
+      if (isEmpty(vdata)) {
+        vdata = autoTemplateParse(newComponent);
+      }
+
 
       if (el.className && el.className.length) {
         newComponent.classList.add(el.className);
@@ -188,7 +193,7 @@ function Vibe($self = document, {fn={}} = {} ) {
       newComponent.$props = props; // The passed in props obj
       newComponent.$self = newComponent;
 
-      // vdate templates
+      // vdata templates
       const vkeys = Object.keys(vdata);
       newComponent.$vdata = vdata; // The passed in vdata obj
       templateReplacer(newComponent, vdata);
@@ -289,7 +294,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         }
 
 
-        // vdate templates
+        // vdata templates
         const vkeys = Object.keys(vdata);
         component.$vdata = vdata; // The passed in vdata obj
         templateReplacer(component, vdata);
@@ -365,7 +370,7 @@ function Vibe($self = document, {fn={}} = {} ) {
           }
         }
 
-        // vdate templates
+        // vdata templates
         const vkeys = Object.keys(vdata);
         newComponent.$vdata = vdata; // The passed in vdata obj
         templateReplacer(newComponent, vdata);
@@ -510,6 +515,36 @@ function Vibe($self = document, {fn={}} = {} ) {
   /*  DOM functions */
 
   /**
+* autoTemplateParse
+* AUTOTEMPLATEPARSE
+* @description parse element for template strings
+* @return object
+*/
+
+  function autoTemplateParse(e) {
+    const allText = e.$text();
+    const re = /{{(.*?)}}/g;
+    const m = allText.matchAll(re);
+    const matches = Array.from(m);
+    const results = [];
+    for (const match of matches) {
+      // console.log(match[1])
+      if (! /^\d/.test(match[1]) && match[1].length) { // identifier can't start with a number
+        results.push(match[1].trim());
+      }
+    }
+    const autoObj = {};
+    if (results.length) {
+      for (const key of results) {
+        autoObj[key] = '';
+      }
+      // console.log(autoObj)
+    }
+    return autoObj;
+  }
+
+
+  /**
 * select
 * SELECT
 * @description select elements of another element optionionally vibe them
@@ -550,6 +585,12 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
           single.$ = Vibe().render(single);
+
+          // if vdata is empty parse the element
+          if (isEmpty(vdata)) {
+            vdata = autoTemplateParse(single);
+          }
+
 
           if (isObject(vdata) && !isEmpty(vdata)) {
             const vkeys = Object.keys(vdata);
@@ -596,6 +637,12 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
             e.$ = Vibe().render(e);
+
+            // if vdata is empty parse the element
+            if (isEmpty(vdata)) {
+              vdata = autoTemplateParse(e);
+            }
+
 
             if (isObject(vdata) && !isEmpty(vdata)) {
               const vkeys = Object.keys(vdata);
