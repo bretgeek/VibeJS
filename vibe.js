@@ -543,12 +543,15 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       if (single) {
         if (vibe) {
+          if (isString(inject) && isObject(vdata) && !isEmpty(vdata)) {
+            const ht = single.innerHTML;
+            single.innerHTML = `${ht}${inject}`;
+          }
+
+
           single.$ = Vibe().render(single);
 
           if (isObject(vdata) && !isEmpty(vdata)) {
-            if (isString(inject)) {
-              single.$append(`${inject}`);
-            }
             const vkeys = Object.keys(vdata);
             single.$vdata = vdata; // The passed in vdata obj
             templateReplacer(single, vdata);
@@ -586,12 +589,15 @@ function Vibe($self = document, {fn={}} = {} ) {
       if (collection.length) {
         if (vibe) {
           collection.forEach((e) => {
+            if (isString(inject) && isObject(vdata) && !isEmpty(vdata)) {
+              const ht = e.innerHTML;
+              e.innerHTML = `${ht}${inject}`;
+            }
+
+
             e.$ = Vibe().render(e);
 
             if (isObject(vdata) && !isEmpty(vdata)) {
-              if (isString(inject)) {
-                e.$append(inject);
-              }
               const vkeys = Object.keys(vdata);
               e.$vdata = vdata; // The passed in vdata obj
               templateReplacer(e, vdata);
