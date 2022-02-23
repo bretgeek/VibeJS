@@ -168,6 +168,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     };
 
     el.set = new Proxy(el, handler);
+    el.$set = el.set; // so we can use set or $set
   }
 
 
