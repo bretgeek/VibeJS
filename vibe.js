@@ -85,14 +85,24 @@ function Vibe($self = document, {fn={}} = {} ) {
 * TEMPLATEREPLACER
 * @description replace {{ strings }} with replacement strings in obj
 */
-  function templateReplacer(e, obj, {html=true} = {} ) {
+  function templateReplacer(e, obj, {html = true, concat = false} = {} ) {
     // If we have already been here operate on original template - i.e. subsequent calls with new data in obj
     // console.log('OBJ is ' + JSON.stringify(obj))
     if (e.templateText) {
       if (html) {
-        e.$html(e.templateHTML);
+        if (concat) {
+          const htm = e.$html() +e.templateHTML;
+          e.$html(htm);
+        } else {
+          e.$html(e.templateHTML);
+        }
       } else {
-        e.$text(e.templateText);
+        if (concat) {
+          const txt = e.$text() +e.templatetext;
+          e.$text(txt);
+        } else {
+          e.$text(e.templateText);
+        }
       }
     }
 
@@ -123,6 +133,41 @@ function Vibe($self = document, {fn={}} = {} ) {
       }
     }
     return this;
+  }
+
+
+  /* ProxifySet */
+
+  /**
+* proxifySet
+* Make vdata property respond by assignment syntax with set keyword as proxy instead of function syntax
+* i.e. el.set.msg = "change me";  instead of el.msg("change me");
+* @param {oject} component - required, the component
+* @param {object} {} - required, the original vdata object
+*/
+  function proxifySet(el, vdata ) {
+    // i.e. el.set.msg
+    const handler = {
+      set: function whenChange(obj, prop, value) {
+        obj[prop] = value;
+        vdata[prop] = value;
+        //  templatereplacer here
+        obj.$templateReplacer(obj, vdata);
+        console.log(`The value of the object has changed to: ${value}`);
+
+        // set the prop back to a function for future use as function syntax
+        obj[prop] = function(s=false) {
+          if (s) {
+            console.log(s);
+            obj.$vdata[prop] = s; templateReplacer(obj, obj.$vdata);
+          }
+        };
+
+        return true;
+      },
+    };
+
+    el.set = new Proxy(el, handler);
   }
 
 
@@ -206,6 +251,8 @@ function Vibe($self = document, {fn={}} = {} ) {
         };
       }
 
+      proxifySet(newComponent, vdata);
+
       // The state if passed in via component OR by render
       if (el.state) {
         newComponent.$state = el.state;
@@ -273,7 +320,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
       // Component is not a function
     } else {
-      // The passed in component is not a function but an existing element
+      // The passed in component is not a function but an existing or a createNode element
       // Note: existing elements must pass in fn, events, plugins, className, state via render obj
       // because there is no function/obj to get them from
       if (component.nodeType === 1) {
@@ -305,6 +352,8 @@ function Vibe($self = document, {fn={}} = {} ) {
             }
           };
         }
+
+        proxifySet(component, vdata);
 
 
         component.classList.add(className);
@@ -372,6 +421,8 @@ function Vibe($self = document, {fn={}} = {} ) {
         const vkeys = Object.keys(vdata);
         newComponent.$vdata = vdata; // The passed in vdata obj
         templateReplacer(newComponent, vdata);
+
+
         for (const k of vkeys) {
           const st = k;
 		 newComponent[st] = function(s=false) {
@@ -380,6 +431,8 @@ function Vibe($self = document, {fn={}} = {} ) {
             }
           };
         }
+
+        proxifySet(newComponent, vdata);
 
 
         // The passed in events/on obj
@@ -594,9 +647,9 @@ function Vibe($self = document, {fn={}} = {} ) {
             templateReplacer(single, vdata);
             for (const k of vkeys) {
               const st = k;
-		 single[st] = function(s=false) {
+		 single[st] = function(s=false, concat= false) {
                 if (s) {
-                  single.$vdata[st] = s; templateReplacer(single, single.$vdata);
+                  single.$vdata[st] = s; templateReplacer(single, single.$vdata, {concat: concat});
                 }
               };
             }
@@ -2107,7 +2160,12 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description delay exection of next chained function and run optional funtion
 *@return {object}
 */
-  function delay( {time=1000, fn=false}) {
+  function delay( {time=1000, fn=false, force=false}) {
+    // this will force it to run in case something has $isrun set to true
+    if (force) {
+      $self.$isrun = false;
+    }
+
     function f() {
       //     console.log('running delay '+time)
       // console.log(`running delay func ${fn.name}`)
@@ -2124,6 +2182,8 @@ function Vibe($self = document, {fn={}} = {} ) {
           }
           $self.$isrun = false;
           $self.$runq();
+          // added this setting to false here to fix having to do the force above
+          $self.$isrun = false;
           // clearInterval(intv)
           intv.clear();
         }
