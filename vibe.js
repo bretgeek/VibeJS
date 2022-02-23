@@ -180,7 +180,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @param {object} {} - optional with defaults
 */
   function render(component, {to = 'body', type = 'div', position = 'append', state={}, props = {}, plugin = {}, events = {}, vdata = {}, className='vibe'} = {} ) {
-    // If to is a string and not and existing node i.e. an id or class we must query for it.
+    // If to is a string and not an existing node i.e. an id or class we must query for it.
     let towhere = to;
     if (!isElement(towhere)) {
       towhere = document.querySelector(to);
