@@ -156,10 +156,10 @@ function Vibe($self = document, {fn={}} = {} ) {
         console.log(`The value of the object has changed to: ${value}`);
 
         // set the prop back to a function for future use as function syntax
-        obj[prop] = function(s=false) {
+        obj[prop] = function(s=false, concat=false) {
           if (s) {
             console.log(s);
-            obj.$vdata[prop] = s; templateReplacer(obj, obj.$vdata);
+            obj.$vdata[prop] = s; templateReplacer(obj, obj.$vdata, {concat: concat});
           }
         };
 
@@ -245,9 +245,9 @@ function Vibe($self = document, {fn={}} = {} ) {
       templateReplacer(newComponent, vdata);
       for (const k of vkeys) {
         const st = k;
-		 newComponent[st] = function(s=false) {
+		 newComponent[st] = function(s=false, concat=false) {
           if (s) {
-            newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
+            newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata, {concat: concat});
           }
         };
       }
@@ -347,9 +347,9 @@ function Vibe($self = document, {fn={}} = {} ) {
         templateReplacer(component, vdata);
         for (const k of vkeys) {
           const st = k;
-		 component[st] = function(s=false) {
+		 component[st] = function(s=false, concat=false) {
             if (s) {
-              component.$vdata[st] = s; templateReplacer(component, component.$vdata);
+              component.$vdata[st] = s; templateReplacer(component, component.$vdata, {concat: concat});
             }
           };
         }
@@ -426,9 +426,9 @@ function Vibe($self = document, {fn={}} = {} ) {
 
         for (const k of vkeys) {
           const st = k;
-		 newComponent[st] = function(s=false) {
+		 newComponent[st] = function(s=false, concat=false) {
             if (s) {
-              newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata);
+              newComponent.$vdata[st] = s; templateReplacer(newComponent, newComponent.$vdata, {concat: concat});
             }
           };
         }
