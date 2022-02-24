@@ -153,7 +153,7 @@ function Vibe($self = document, {fn={}} = {} ) {
         vdata[prop] = value;
         //  templatereplacer here
         obj.$templateReplacer(obj, vdata);
-        console.log(`The value of the object has changed to: ${value}`);
+        // console.log(`The value of the object has changed to: ${value}`);
 
         // set the prop back to a function for future use as function syntax
         obj[prop] = function(s=false, concat=false) {
