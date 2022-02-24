@@ -24,7 +24,6 @@ Visit **https://vibejs.com** for updates and info.
 * Easy Familiar syntax with built-in chainable DOM manipulation methods.
 * Built-in Drag, Drop, Swipe.
 * Built-in delay queue.
-* Animate any CSS property with built-in animation and easing functions (combine with delay queue for awesome effects).
 * Pass in external functions or plugin functions to your rendered components.
 * Ability set up custom observers on rendered components.
 * Convert any element or HTML string to a Vibe'd element.
