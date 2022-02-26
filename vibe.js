@@ -2202,7 +2202,7 @@ function Vibe($self = document, {fn={}} = {} ) {
               // clearInterval(intv)
               intv.clear();
             }
-          }, 1);
+          }, time); // was 1 here but time seems more appropriate
         };
 
 
@@ -2223,7 +2223,7 @@ function Vibe($self = document, {fn={}} = {} ) {
   /**
 *queue
 *queue
-* @description A add a function to the queue (uses delay to do it)
+* @description Add a function to the queue (uses delay to do it)
 *@return this
 */
   function queue(fn, time=1) {
@@ -2649,6 +2649,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     fn: fn,
     id: id,
     uuid: uuidv4,
+    animate: delay,
     clone: clone,
     ready: ready,
     get: get,
