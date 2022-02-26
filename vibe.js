@@ -2161,7 +2161,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description delay exection of next chained function and run optional funtion
 *@return {object}
 */
-  function delay( {time=1000, iterate=1, step=1, fn=false, force=false}) {
+  function delay( {time=1000, iterate=1, step=1, fn=false, force=false}, options={}) {
     let stepper = 0;// for increasing step
     let iterator = iterate;
     // this will force it to run in case something has $isrun set to true
@@ -2170,7 +2170,7 @@ function Vibe($self = document, {fn={}} = {} ) {
     }
 
     if (iterate && isNumber(iterate) && typeof(step) == 'number' ) {
-      console.log(` iterate is: ${iterate}`);
+      //     console.log(` iterate is: ${iterate}`);
       // loop iterate amount of times and add more delays
       for ( let i = 0; i < iterate; i++ ) {
         const f = function($self) {
@@ -2189,7 +2189,11 @@ function Vibe($self = document, {fn={}} = {} ) {
                 // round stepper to nearest decimal
                 stepper = +stepper.toFixed(2);
                 iterator = iterator - 1;
-                fn($self, stepper, iterator);
+                options['stepper'] = stepper;
+                options['iteration'] = iterate-iterator;
+                options['el'] = $self;
+                // send all params including $self , stepper and iterator as iteration as object param to fn
+                fn(options);
               }
               $self.$isrun = false;
               $self.$runq();
