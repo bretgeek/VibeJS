@@ -2204,6 +2204,14 @@ function Vibe($self = document, {fn={}} = {} ) {
               options['iterationsLeft'] = iterate - (iterate-iterator);
               options['frame'] = iterate-iterator;
               options['el'] = $self;
+
+              // kill this set of iterations
+              options['kill'] = function() {
+                $self.$q.splice(0, iterate - (iterate-iterator));
+                $self.$isrun = false;
+              };
+
+
               // send all params including $self , stepper and iterator as iteration as object param to fn
               fn(options);
             }
@@ -2228,6 +2236,14 @@ function Vibe($self = document, {fn={}} = {} ) {
                 options['iteration'] = iterate-iterator;
                 options['iterationsLeft'] = iterate - (iterate-iterator);
                 options['el'] = $self;
+
+                // kill this set of iterations
+                options['kill'] = function() {
+                  $self.$q.splice(0, iterate - (iterate-iterator));
+                  $self.$isrun = false;
+                };
+
+
                 // send all params including $self , stepper and iterator as iteration as object param to fn
                 fn(options);
               }
