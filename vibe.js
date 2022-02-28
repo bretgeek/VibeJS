@@ -2161,17 +2161,51 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @description delay exection of next chained function and run optional funtion
 *@return {object}
 */
-  function delay( {time=1000, iterate=1, step=1, duration=false, fn=false, fps=false, force=false}, options={}) {
+  function delay( {time=1000, iterate=false, autocalc=false, step=1, duration=false, fn=false, fps=false, force=false}, options={}) {
     // fps overides time and uses fps
     if (isNumber(fps)) {
       // time is now fps
       options['fps'] = fps;
       fps = Math.round(1000/fps);
+
+      // autocalc need to be a whole number in minutes and will override iterate value
+      // autocalc number of iterations based on fps so you don't have to set them if using endTime
+      // all this does is make sure that there are more than enough iterations to run so that it doesnt end
+      // before endTime - also it's up to you to check / diff endTime with a start time in fn then end your delay set early.
+      /*
+    // EXAMPLE endTime usage in fn
+    // send in endTime to delay as endTime:
+     let dt = new Date();
+     let t = dt.getTime();
+     let dur = 1 * 1000 * 60; // set autocalc to 1 or 2 minutes
+     let endTime = t+dur; // so endTime: endTime
+
+
+     if(stage.endTime){
+
+       let curTime = new Date().getTime();
+         if(curTime > stage.endTime){
+         stage.kill();
+        return;
+      }
+     }
+
+   */
+      if (isNumber(autocalc)) {
+        let itercalc = fps * 60;
+        itercalc = Math.round(itercalc/100)*100;
+        options['itercalc'] = itercalc;
+        iterate = itercalc;
+      }
+    }
+
+    // if iterate doesn't get autocalced and assigned above and was not passed in set it to at least 1
+    if (!iterate) {
+      iterate = 1;
     }
 
     // pass in iterate to options for fn
     options['iterate'] = iterate;
-
     let stepper = 0;// for increasing step
     let iterator = iterate;
     // this will force it to run in case something has $isrun set to true
