@@ -2162,12 +2162,13 @@ function Vibe($self = document, {fn={}} = {} ) {
 *@return {object}
 */
   function delay( {time=1000, iterate=1, step=1, duration=false, fn=false, fps=false, force=false}, options={}) {
-    // fps overides time - and converts existing time to fps
+    // fps overides time and uses fps
     if (isNumber(fps)) {
       // time is now fps
-      time = Math.round(1000 / fps);
-      options['fps'] = time;
+      options['fps'] = fps;
+      fps = Math.round(1000/fps);
     }
+
 
     let stepper = 0;// for increasing step
     let iterator = iterate;
@@ -2178,17 +2179,18 @@ function Vibe($self = document, {fn={}} = {} ) {
 
     //     console.log(` iterate is: ${iterate}`);
     // loop iterate amount of times and add more delays
+
     for ( let i = 0; i < iterate; i++ ) {
       const f = function($self) {
         //     console.log('running delay '+time)
         // console.log(`running delay func ${fn.name}`)
         const d = new Date();
         const fut = d.getTime()+time;
+
+
         //     console.log(`d is ${d.getTime()} fut is ${fut}`)
-        // let intv = setInterval(function(){
-        const intv = requestInterval(function() {
-          const newd = new Date();
-          if (newd.getTime() >= fut) {
+        if (fps) {
+          const intv = requestInterval(function() {
             //        console.log('I was delayed')
             if (isFunction(fn)) {
               stepper += step;
@@ -2197,6 +2199,7 @@ function Vibe($self = document, {fn={}} = {} ) {
               iterator = iterator - 1;
               options['step'] = stepper;
               options['iteration'] = iterate-iterator;
+              options['frame'] = iterate-iterator;
               options['el'] = $self;
               // send all params including $self , stepper and iterator as iteration as object param to fn
               fn(options);
@@ -2207,8 +2210,32 @@ function Vibe($self = document, {fn={}} = {} ) {
             $self.$isrun = false;
             // clearInterval(intv)
             intv.clear();
-          }
-        }, time); // was 1 here but time seems more appropriate
+          }, fps); // was 1 here but time seems more appropriate
+        } else {
+          const intv = requestInterval(function() {
+            const newd = new Date();
+            if (newd.getTime() >= fut) {
+            //        console.log('I was delayed')
+              if (isFunction(fn)) {
+                stepper += step;
+                // round stepper to nearest decimal
+                stepper = +stepper.toFixed(2);
+                iterator = iterator - 1;
+                options['step'] = stepper;
+                options['iteration'] = iterate-iterator;
+                options['el'] = $self;
+                // send all params including $self , stepper and iterator as iteration as object param to fn
+                fn(options);
+              }
+              $self.$isrun = false;
+              $self.$runq();
+              // added this setting to false here to fix having to do the force above
+              $self.$isrun = false;
+              // clearInterval(intv)
+              intv.clear();
+            }
+          }, time); // was 1 here but time seems more appropriate
+        }
       };
 
 
