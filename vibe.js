@@ -2169,6 +2169,8 @@ function Vibe($self = document, {fn={}} = {} ) {
       fps = Math.round(1000/fps);
     }
 
+    // pass in iterate to options for fn
+    options['iterate'] = iterate;
 
     let stepper = 0;// for increasing step
     let iterator = iterate;
@@ -2199,6 +2201,7 @@ function Vibe($self = document, {fn={}} = {} ) {
               iterator = iterator - 1;
               options['step'] = stepper;
               options['iteration'] = iterate-iterator;
+              options['iterationsLeft'] = iterate - (iterate-iterator);
               options['frame'] = iterate-iterator;
               options['el'] = $self;
               // send all params including $self , stepper and iterator as iteration as object param to fn
@@ -2223,6 +2226,7 @@ function Vibe($self = document, {fn={}} = {} ) {
                 iterator = iterator - 1;
                 options['step'] = stepper;
                 options['iteration'] = iterate-iterator;
+                options['iterationsLeft'] = iterate - (iterate-iterator);
                 options['el'] = $self;
                 // send all params including $self , stepper and iterator as iteration as object param to fn
                 fn(options);
