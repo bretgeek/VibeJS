@@ -2168,12 +2168,11 @@ function Vibe($self = document, {fn={}} = {} ) {
       options['fps'] = fps;
       fps = Math.round(1000/fps);
 
-      // autocalc need to be a whole number in minutes and will override iterate value
-      // autocalc number of iterations based on fps so you don't have to set them if using endTime
-      // all this does is make sure that there are more than enough iterations to run so that it doesnt end
-      // before endTime - also it's up to you to check / diff endTime with a start time in fn then end your delay set early.
+      // Auto calculate number of iterations based on fps so you don't have to set them if using endTime.
+      // All this does is make sure that there are more than enough iterations to run so that it doesnt end
+      // before endTime. It's up to you to to send in a correct endTime (epoch) and check / diff endTime with a start time in fn then end your delay set early.
       /*
-    // EXAMPLE endTime usage in fn
+    // EXAMPLE endTime usage in fn - set endTime to current date plus 1 minute
     // send in endTime to delay as endTime:
      let dt = new Date();
      let t = dt.getTime();
@@ -2182,22 +2181,26 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
      if(stage.endTime){
-
        let curTime = new Date().getTime();
          if(curTime > stage.endTime){
          stage.kill();
         return;
       }
      }
-
    */
-      if (isNumber(autocalc)) {
-        let itercalc = fps * 60;
+      // auto calculate iterations based on endTIme
+      if ((autocalc && options.endTime)) {
+        const curTime = new Date().getTime();
+        let diff = options.endTime - curTime;
+        // console.log('diff is '+diff/1000);
+        diff = Math.round(diff/1000);
+        let itercalc = fps * diff;
         itercalc = Math.round(itercalc/100)*100;
         options['itercalc'] = itercalc;
         iterate = itercalc;
       }
-    }
+    } // end if fps
+
 
     // if iterate doesn't get autocalced and assigned above and was not passed in set it to at least 1
     if (!iterate) {
