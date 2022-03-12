@@ -827,7 +827,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 
 
     let cs = getComputedStyle($self).getPropertyValue(prop) || null;
-    if (trim) {
+    if (trim && isNumber(cs)) {
       try {
         cs = rpx(cs);
       } catch (e) {
@@ -2248,6 +2248,8 @@ function Vibe($self = document, {fn={}} = {} ) {
                 $self.$isrun = false;
               };
 
+              // add kill function to $self for this set of iterations
+              $self.$kill = options['kill'];
 
               // send all params including $self , stepper and iterator as iteration as object param to fn
               fn(options);
@@ -2280,6 +2282,9 @@ function Vibe($self = document, {fn={}} = {} ) {
                   $self.$isrun = false;
                 };
 
+
+                // add kill function to $self for this set of iterations
+                $self.$kill = options['kill'];
 
                 // send all params including $self , stepper and iterator as iteration as object param to fn
                 fn(options);
