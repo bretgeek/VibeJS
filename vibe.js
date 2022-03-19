@@ -588,7 +588,10 @@ function Vibe($self = document, {fn={}} = {} ) {
       for (const key of results) {
         autoObj[key] = '';
       }
-      // console.log(autoObj)
+    }
+    // fix for empty vdata in in elements where element contents get erased
+    if (!autoObj.length) {
+      return;
     }
     return autoObj;
   }
