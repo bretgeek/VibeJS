@@ -618,7 +618,7 @@ function Vibe($self = document, {fn={}} = {} ) {
 * @return collection or false if none
 */
 
-  function select(str, {all = false, vibe = true, fn = false, plugin = {}, inject = false, vdata = {}} = {} ) {
+  function select(str, {all = false, vibe = true, fn = false, plugin = {}, inject = false, vdata = {fake: 'fakeobj'}} = {} ) {
     if (!all) {
       // Only return first
       let single = false;
@@ -748,7 +748,11 @@ function Vibe($self = document, {fn={}} = {} ) {
 *
 */
   function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
+    if (Object.keys(obj).length === 0 && obj.constructor === Object) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
