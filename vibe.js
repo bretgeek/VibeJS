@@ -2841,8 +2841,8 @@ function Vibe($self = document, {fn={}} = {} ) {
     $self[key] = obj[i];
 
     // give user the option to not use $ prefixed function names i.e. vkey for vanilla
-    const vkey = i;
-    $self[vkey] = obj[i];
+    //    const vkey = i;
+    //    $self[vkey] = obj[i];
   }
 
 
